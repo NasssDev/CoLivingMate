@@ -40,7 +40,7 @@ class UserController extends AbstractController
         $login = filter_input(INPUT_POST, "login");
         $getUser = $userManager->readUser($username);
 
-        if(isset($getUser)){
+        if($getUser === true){
             if (!password_verify($pwd, $getUser->getPwd())){
                 $this->renderJson("Identifiants incorrects", 403);
             }
@@ -81,10 +81,7 @@ class UserController extends AbstractController
             $getUserInfo = $userManager->readUserReturn($username);
 
             $this->renderJson([$getUserInfo]);
-
         }
-        
-
     }
 
     #[Route('/respwd', name: "respwd", methods: ["POST"])]

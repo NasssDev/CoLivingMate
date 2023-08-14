@@ -1,8 +1,8 @@
-# ReactLoginSignupUITemplate
+# React + Vite
 
-Build React Login & Sign Up UI Template with Bootstrap 5 - Create React authentication system such as login and sign up template using Bootstrap.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-[Build React Login & Sign Up UI Template with Bootstrap 5](https://www.positronx.io/build-react-login-sign-up-ui-template-with-bootstrap-4/)# colloc_react
-# colloc_react
-# colloc_react
-# colloc_react
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh

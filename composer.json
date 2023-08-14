@@ -11,5 +11,7 @@
             "email": "justin.leluc@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+      "ext-pdo": "*"
+    }
 }
