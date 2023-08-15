@@ -18,6 +18,8 @@ class FlatshareController extends AbstractController
         $address = $_REQUEST['address'];
         $start_date = $_REQUEST['start_date'];
         $end_date = $_REQUEST['end_date'];
+        $city = $_REQUEST['city'];
+        $zip_code = $_REQUEST['zip_code'];
         //$image = $_FILES['image'];
 
         $userManager = new UserManager(new PDOFactory());
@@ -31,7 +33,7 @@ class FlatshareController extends AbstractController
 
         $flatshareManager = new FlatshareManager(new PDOFactory());
 
-        $result = $flatshareManager->createFlatshare($id_creator, $name, $address, $start_date, $end_date);
+        $result = $flatshareManager->createFlatshare($id_creator, $name, $address, $start_date, $end_date, $city, $zip_code);
 
         if($result instanceof \Exception) {
             $this->renderJson('Un problème est survenu lors de la création, veuillez réessayer ! '.$result->getMessage(), 401);
@@ -83,6 +85,8 @@ class FlatshareController extends AbstractController
         $address = $_REQUEST['address'];
         $start_date = $_REQUEST['start_date'];
         $end_date = $_REQUEST['end_date'];
+        $city = $_REQUEST['city'];
+        $zip_code = $_REQUEST['zip_code'];
 
         $flatshareManager = new FlatshareManager(new PDOFactory());
 
@@ -95,7 +99,7 @@ class FlatshareController extends AbstractController
 
         $nameFlatshare = $result->getName();
 
-        $result = $flatshareManager->updateFlatshare($id_flatshare, $name, $address, $start_date, $end_date);
+        $result = $flatshareManager->updateFlatshare($id_flatshare, $name, $address, $start_date, $end_date, $city, $zip_code);
 
         if ($result instanceof \Exception){
             $this->renderJson("Impossible d'effectuer la modification, veuillez réessayer !", 501);
@@ -144,7 +148,7 @@ class FlatshareController extends AbstractController
 
     }
 
-    #[Route('/selectAll', name: "selectall", methods: ["GET"])]
+    #[Route('/select_all', name: "selectall", methods: ["GET"])]
     public function select()
     {
         $flatshareManager = new FlatshareManager(new PDOFactory());

@@ -20,11 +20,11 @@ class FlatshareManager extends BaseManager
      *  2- la deuxième s'occupe d'insérer des données dans la table de jointure/associative ( n to n )
      *  En cas d'erreur dans une des deux requête on rollback
      */
-    public function createFlatshare(int $id_creator, string $name, string $address, string $start_date, string $end_date):int|\Exception
+    public function createFlatshare(int $id_creator, string $name, string $address, string $start_date, string $end_date, string $city, string $zip_code):int|\Exception
     {
         $this->pdo->query('START TRANSACTION');
 
-        $res_flatshare = $this->insertFlatshare($name, $address, $start_date, $end_date);
+        $res_flatshare = $this->insertFlatshare($name, $address, $start_date, $end_date, $city, $zip_code);
         $res_roommate_has =  $this->insertRoomateHasFlatshare($res_flatshare, $id_creator);
 
         if ($res_flatshare instanceof \Exception || $res_roommate_has instanceof \Exception) {
@@ -49,14 +49,17 @@ class FlatshareManager extends BaseManager
      * @param string $end_date
      * @return int|\Exception
      */
-    public function insertFlatshare(string $name, string $address, string $start_date, string $end_date): int|\Exception
+    public function insertFlatshare(string $name, string $address, string $start_date, string $end_date, string $city, string $zip_code): int|\Exception
     {
         try {
-            $query = $this->pdo->prepare('INSERT INTO flat_share ( name , address, start_date, end_date) VALUES (:name, :address, :start_date, :end_date)');
+            $query = $this->pdo->prepare('INSERT INTO flat_share ( name , address, start_date, end_date, city, zip_code) VALUES (:name, :address, :start_date, :end_date, :city, :zip_code)');
             $query->bindValue('name', $name, \PDO::PARAM_STR);
             $query->bindValue('address', $address, \PDO::PARAM_STR);
+            $query->bindValue('city', $city, \PDO::PARAM_STR);
+            $query->bindValue('zip_code', $zip_code, \PDO::PARAM_STR);
             $query->bindValue('start_date', $start_date);
             $query->bindValue('end_date', $end_date);
+
 
             $query->execute();
             return $this->pdo->lastInsertId();
@@ -144,13 +147,15 @@ class FlatshareManager extends BaseManager
      * @param $end_date
      * @return int|\Exception
      */
-    public function updateFlatshare(int $id, string $name, string $address, $start_date, $end_date):int|\Exception
+    public function updateFlatshare(int $id, string $name, string $address, $start_date, $end_date, string $city, string $zip_code):int|\Exception
     {
         try {
             $query = $this->pdo->prepare('UPDATE flat_share SET name=:name, address=:address, start_date=:strat_date, end_date=:end_date WHERE id = :id');
             $query->bindValue('id', $id, \PDO::PARAM_INT);
             $query->bindValue('name', $name, \PDO::PARAM_STR);
             $query->bindValue('address', $address, \PDO::PARAM_STR);
+            $query->bindValue('city', $city, \PDO::PARAM_STR);
+            $query->bindValue('zip_code', $zip_code, \PDO::PARAM_STR);
             $query->bindValue('start_date', $start_date);
             $query->bindValue('end_date', $end_date);
 
