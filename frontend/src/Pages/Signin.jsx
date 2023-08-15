@@ -2,10 +2,12 @@ import {useEffect, useState} from "react";
 import {ButtonForm} from "../Components/ButtonForm.jsx";
 import {InputForm} from "../Components/InputForm.jsx";
 import {Link} from "react-router-dom";
-
-export const Signin = () => {
+import {useNavigate} from "react-router-dom";
+export const Signin = ({setIsLogged}) => {
 
     const [formData, setFormData] = useState({username: "", pwd: ""});
+
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -22,6 +24,13 @@ export const Signin = () => {
             .then(res => res.json())
             .then(data => {
                     console.log(data);
+                    if (data.status !== 200) {
+                        alert("Wrong username or password");
+                        return;
+                    }
+                    setIsLogged(true);
+                    sessionStorage.setItem("token", data.data.id + data.data.username + data.data.email);
+                    navigate("/");
                 }
             )
     }

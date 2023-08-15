@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Link} from "react-router-dom";
 
-export const Navbar = () => {
+export const Navbar = ({isLogged}) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -12,7 +12,7 @@ export const Navbar = () => {
                         CoLivingMate
                     </Link>
 
-                    {/* Bouton de menu mobile */}
+                    {isLogged && (
                     <div className="flex lg:hidden">
                         <button
                             onClick={() => setIsOpen(!isOpen)}
@@ -32,10 +32,9 @@ export const Navbar = () => {
                                 </svg>
                             )}
                         </button>
-                    </div>
+                    </div>)}
                 </div>
-
-                {/* Menu mobile ouvert : "block", Menu fermé : "hidden" */}
+                {isLogged && (
                 <div
                     className={`absolute inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white md:mt-0 md:p-0 md:top-0 md:relative md:opacity-100 md:translate-x-0 md:flex md:items-center md:justify-between ${isOpen ? 'translate-x-0 opacity-100' : 'opacity-0 -translate-x-full'}`}>
                     <div className="flex flex-col px-2 -mx-4 md:flex-row md:mx-10 md:py-0">
@@ -68,7 +67,7 @@ export const Navbar = () => {
                             placeholder="Search"
                         />
                     </div>
-                </div>
+                </div>)}
             </div>
         </nav>
     );

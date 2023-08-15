@@ -12,7 +12,7 @@ export const Home = () => {
                     console.log(data)
                     setFlatshares(data.data);
                     setFlatshares(current => {
-                        console.log("STATE ",current);
+                        console.log("STATE ", current);
                         return current;
                     })
                 }
@@ -22,7 +22,11 @@ export const Home = () => {
     return (
         <div className="h-full min-h-screen bg-white">
             <h1 className="text-3xl text-indigo-500">Home</h1>
-            {flatshares.map(flatshare => { return <FlatshareCard key={flatshare.id} flatshare={flatshare}/>  })}
+            <div className="flex flex-row flex-wrap gap-4">
+                {flatshares.map(flatshare => {
+                    return <FlatshareCard key={flatshare.id} flatshare={flatshare}/>
+                })}
+            </div>
         </div>
     )
 }
