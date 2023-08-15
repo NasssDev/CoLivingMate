@@ -39,8 +39,8 @@ class UserController extends AbstractController
 
         $login = filter_input(INPUT_POST, "login");
         $getUser = $userManager->readUser($username);
-
-        if($getUser === true){
+//        var_dump($getUser);die;
+        if($getUser !== false){
             if (!password_verify($pwd, $getUser->getPwd())){
                 $this->renderJson("Identifiants incorrects", 403);
             }
@@ -52,12 +52,11 @@ class UserController extends AbstractController
             }  
         }else{
             $this->renderJson("Identifiants incorrects",403 );
-
         }
     }
 
-    #[Route('/signin', name: "signin", methods: ["POST"])]
-    public function signin2()
+    #[Route('/signup', name: "signin", methods: ["POST"])]
+    public function signup()
     {
         $firstname = filter_input(INPUT_POST, "firstname");
         $lastname = filter_input(INPUT_POST, "lastname");
