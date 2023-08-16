@@ -263,8 +263,8 @@ class FlatshareController extends AbstractController
 
         $data = $flatshareManager->selectAllRoommate($id_flatshare);
 
-        if ($result instanceof \Exception) {
-            $this->renderJson("Une erreur est survenue lors de la récupération des collocataires de $flatshareName !", 401);
+        if ($data instanceof \Exception) {
+            $this->renderJson("Une erreur est survenue lors de la récupération des collocataires de la colocation : $flatshareName !", 401);
             die;
         }
 

@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 export const FlatshareDetails = ({flatshares}) => {
 
     const id = window.location.pathname.split("/")[2];
-    const [currentFlatshare, setCurrentFlatshare] = useState(flatshares.find(flatshare => Number(flatshare.id) === Number(id)));
+    const [currentFlatshare, setCurrentFlatshare] = useState({});
 
     const [selectedImage, setSelectedImage] = useState(`https://source.unsplash.com/600x300/?house,${currentFlatshare.name}`);
 
@@ -19,6 +19,15 @@ export const FlatshareDetails = ({flatshares}) => {
         setSelectedImage(image);
     };
 
+    useEffect(() => {
+        fetch("http://localhost:1200/select_infos?id_flatshare=" + id)
+            .then(res => res.json())
+            .then(data => {
+                    console.log(data.data)
+                    setCurrentFlatshare(data.data[0]);
+                }
+            )
+    }, [])
 
     return (
         <div className="h-full min-h-screen bg-white">
@@ -42,7 +51,7 @@ export const FlatshareDetails = ({flatshares}) => {
                 </div>
                 <div className={"py-4"}>
                     <svg fill="#8b5cf6" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                         xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 395.71 395.71" xml:space="preserve"
+                         xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 395.71 395.71" xmlSpace="preserve"
                          stroke="#8b5cf6" className={"float-left"} width="20" height="20"><path d="M197.849,0C122.131,0,60.531,61.609,60.531,137.329c0,72.887,124.591,243.177,129.896,250.388l4.951,6.738 c0.579,0.792,1.501,1.255,2.471,1.255c0.985,0,1.901-0.463,2.486-1.255l4.948-6.738c5.308-7.211,129.896-177.501,129.896-250.388 C335.179,61.609,273.569,0,197.849,0z M197.849,88.138c27.13,0,49.191,22.062,49.191,49.191c0,27.115-22.062,49.191-49.191,49.191 c-27.114,0-49.191-22.076-49.191-49.191C148.658,110.2,170.734,88.138,197.849,88.138z"/></svg>
                     <span
                         className="text-gray-500 ml-2">{currentFlatshare.address + " - " + currentFlatshare.city + " - " + currentFlatshare.zip_code} </span>
@@ -58,6 +67,9 @@ export const FlatshareDetails = ({flatshares}) => {
                             <span className="text-gray-600 text-2xl">/6</span>
                         </div>
                     </div>
+                </div>
+                <div>
+                    <a href={`mailto:${currentFlatshare.email}`} className="bg-indigo-500 text-lg text-white px-32 py-2 rounded-lg mt-4  hover:bg-indigo-600 transition duration-300">Send a message</a>
                 </div>
             </div>
         </div>
