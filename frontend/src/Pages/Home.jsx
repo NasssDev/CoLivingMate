@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {FlatshareCard} from "../Components/FlatshareCard.jsx";
 
-export const Home = ({flatshares,setFlatshares}) => {
+export const Home = ({flatshares}) => {
 
     return (
         <div className="h-full min-h-screen bg-white">

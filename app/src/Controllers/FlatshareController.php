@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controllers;
+
 use App\Factories\PDOFactory;
 use App\Managers\FlatshareManager;
 use App\Managers\ExpenditureManager;
@@ -26,7 +27,7 @@ class FlatshareController extends AbstractController
 
         $result = $userManager->readUserById($id_creator);
 
-        if($result instanceof \Exception) {
+        if ($result instanceof \Exception) {
             $this->renderJson('Un problème est survenu lors de la création, problème avec le compte créant la collocation, veuillez réessayer !', 401);
             die;
         }
@@ -35,14 +36,14 @@ class FlatshareController extends AbstractController
 
         $result = $flatshareManager->createFlatshare($id_creator, $name, $address, $start_date, $end_date, $city, $zip_code);
 
-        if($result instanceof \Exception) {
-            $this->renderJson('Un problème est survenu lors de la création, veuillez réessayer ! '.$result->getMessage(), 401);
+        if ($result instanceof \Exception) {
+            $this->renderJson('Un problème est survenu lors de la création, veuillez réessayer ! ' . $result->getMessage(), 401);
             die;
         }
 
         $lastInsertFlatshare = $flatshareManager->selectOneFlatshareToReturn($result);
 
-        if ($lastInsertFlatshare instanceof \Exception){
+        if ($lastInsertFlatshare instanceof \Exception) {
             $this->renderJson('Créé avec succès, mais il est impossible de récuperer les données !', 555);
             die;
         }
@@ -60,7 +61,7 @@ class FlatshareController extends AbstractController
 
         $result = $flatshareManager->selectOneFlatshare($id_flatshare);
 
-        if ($result instanceof \Exception){
+        if ($result instanceof \Exception) {
             $this->renderJson("Nous n'arrivons pas à effectuer la suppresion, vérifiez que la collocation existe toujours !", 501);
             die;
         }
@@ -69,7 +70,7 @@ class FlatshareController extends AbstractController
 
         $result = $flatshareManager->deleteFlatshare($id_flatshare);
 
-        if ($result instanceof \Exception){
+        if ($result instanceof \Exception) {
             $this->renderJson("Impossible d'effectuer la suppresion, veuillez réessayer !", 501);
             die;
         }
@@ -92,7 +93,7 @@ class FlatshareController extends AbstractController
 
         $result = $flatshareManager->selectOneFlatshare($id_flatshare);
 
-        if ($result instanceof \Exception){
+        if ($result instanceof \Exception) {
             $this->renderJson("Nous n'arrivons pas à effectuer la modification, vérifiez que la collocation est toujours existante !", 501);
             die;
         }
@@ -101,7 +102,7 @@ class FlatshareController extends AbstractController
 
         $result = $flatshareManager->updateFlatshare($id_flatshare, $name, $address, $start_date, $end_date, $city, $zip_code);
 
-        if ($result instanceof \Exception){
+        if ($result instanceof \Exception) {
             $this->renderJson("Impossible d'effectuer la modification, veuillez réessayer !", 501);
             die;
         }
@@ -131,21 +132,22 @@ class FlatshareController extends AbstractController
             $this->renderJson("Impossible de récupérer les infos liées à la collocation $nameFlatshare, veuillez réessayer !", 501);
             die;
         }
-         $expenditureManager = new ExpenditureManager(new PDOFactory());
-         $getMonthFee= $expenditureManager->getMonthFee($id_flatshare);
-
-        if ($getMonthFee && $getMonthFee['date']== date('d')){
-          $expenditureName=$getMonthFee['fee_name'];
-          $expenditureAmount=$getMonthFee['fee_amount'];
-          $countUser = $expenditureManager->countUser($id_flatshare);
-          $queryUser = $expenditureManager->userFlatShare($id_flatshare);
-
-        $expenditureAmount = $expenditureAmount / $countUser;
-        $expenditureAmount =floatval(number_format($expenditureAmount,2, '.',''));
-           $expenditureManager->createExpenditure($expenditureName, $id_flatshare, $expenditureAmount, null, $queryUser);
-         }
+//        $expenditureManager = new ExpenditureManager(new PDOFactory());
+//        $getMonthFee = $expenditureManager->getMonthFee($id_flatshare);
+//
+////         var_dump($getMonthFee);die;
+//
+//        if ($getMonthFee && $getMonthFee['date'] == date('d')) {
+//            $expenditureName = $getMonthFee['fee_name'];
+//            $expenditureAmount = $getMonthFee['fee_amount'];
+//            $countUser = $expenditureManager->countUser($id_flatshare);
+//            $queryUser = $expenditureManager->userFlatShare($id_flatshare);
+//
+//            $expenditureAmount = $expenditureAmount / $countUser;
+//            $expenditureAmount = floatval(number_format($expenditureAmount, 2, '.', ''));
+//            $expenditureManager->createExpenditure($expenditureName, $id_flatshare, $expenditureAmount, null, $queryUser);
+//        }
         $this->renderJson($data);
-
     }
 
     #[Route('/select_all', name: "selectall", methods: ["GET"])]
@@ -196,7 +198,7 @@ class FlatshareController extends AbstractController
 
         $result = $flatshareManager->insertRoomateHasFlatshare($id_flatshare, $id_new_roommate, $role);
 
-        if($result instanceof \Exception) {
+        if ($result instanceof \Exception) {
             $this->renderJson("Un problème est survenu lors de l'ajout du nouveau collocataire, vérifiez qu'il ne fait pas déjà partie de la collocation, sinon, veuillez réessayer !", 401);
             die;
         }
@@ -262,6 +264,33 @@ class FlatshareController extends AbstractController
         $flatshareName = $result->getName();
 
         $data = $flatshareManager->selectAllRoommate($id_flatshare);
+
+        if ($data instanceof \Exception) {
+            $this->renderJson("Une erreur est survenue lors de la récupération des collocataires de la colocation : $flatshareName !", 401);
+            die;
+        }
+
+        // all success //
+        $this->renderJson($data);
+    }
+
+    #[Route('/select_roommate_flatshares', name: "kickRoommate", methods: ["POST", "GET"])]
+    public function selectRoommateFlatshares()
+    {
+        $id_roommate = intval($_REQUEST['id_roommate']);
+
+        $userManager = new UserManager(new PDOFactory());
+
+        $result = $userManager->readUserById($id_roommate);
+
+        if ($result instanceof \Exception) {
+            $this->renderJson("Nous n'arrivons pas à effectuer la récuperation, vérifiez que la collocation est toujours existante !", 401);
+            die;
+        }
+
+        $flatshareManager = new FlatshareManager(new PDOFactory());
+
+        $data = $flatshareManager->selectRoommateFlatshares($id_roommate);
 
         if ($data instanceof \Exception) {
             $this->renderJson("Une erreur est survenue lors de la récupération des collocataires de la colocation : $flatshareName !", 401);

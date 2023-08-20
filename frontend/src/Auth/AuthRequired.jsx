@@ -4,6 +4,6 @@ export default function AuthRequired(props) {
     if (sessionStorage.token) {
         return props.children
     } else {
-        return <Navigate to={"/login"}/>
+        return <Navigate to={"/signin"}/>
     }
 }

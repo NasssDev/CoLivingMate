@@ -67,6 +67,8 @@ class UserManager extends BaseManager
 
             $data = $query->fetch(\PDO::FETCH_ASSOC);
 
+//            var_dump($id);die;
+
             return (is_array($data)) ? new User($data) : throw new \Exception();
 
         }catch(\Exception $e){
@@ -131,6 +133,15 @@ class UserManager extends BaseManager
         // $query3 = $this->pdo->prepare("DELETE FROM comment WHERE author=:username ");
         // $query3->bindValue('username', $username, \PDO::PARAM_STR);
         // $query3->execute();   
+    }
+
+    public function countUser($flat_share_id)
+    {
+        $queryCountUser = $this->pdo->prepare('SELECT COUNT(*)  FROM roomate_has_flat_share WHERE flat_share_id=:actual_flat_share_id');
+        $queryCountUser->bindValue('actual_flat_share_id', $flat_share_id, \PDO::PARAM_INT);
+        $queryCountUser->execute();
+        $data = $queryCountUser->fetch();
+        return $data[0];
     }
     
 }

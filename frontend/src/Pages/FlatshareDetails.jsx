@@ -31,7 +31,7 @@ export const FlatshareDetails = ({flatshares}) => {
 
     return (
         <div className="h-full min-h-screen bg-white">
-            <h1 className="text-3xl text-indigo-500">Flatshare Details</h1>
+            <h1 className="text-3xl text-indigo-500">Flat Share Details</h1>
             <div className="mt-4">
                 <h1 className="font-semibold text-xl tracking-wide">{currentFlatshare.name}</h1>
                 <div className="flex flex-col md:flex-row items-end mt-4">
@@ -69,7 +69,7 @@ export const FlatshareDetails = ({flatshares}) => {
                     </div>
                 </div>
                 <div>
-                    <a href={`mailto:${currentFlatshare.email}`} className="bg-indigo-500 text-lg text-white px-32 py-2 rounded-lg mt-4  hover:bg-indigo-600 transition duration-300">Send a message</a>
+                    <a href={`mailto:${currentFlatshare.email}`} className="bg-indigo-500 text-lg text-white px-6 py-2 rounded-lg mt-4  hover:bg-indigo-600 transition duration-300">Send a message</a>
                 </div>
             </div>
         </div>

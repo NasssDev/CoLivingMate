@@ -9,6 +9,6 @@ class HomeController extends AbstractController
     #[Route('/', name: "home", methods: ["POST", "GET"])]
     public function home()
     {
-        echo('SALUUUUUUUT');
+        $this->renderJson('Vous êtes sur le HomeController pour la route "/"');
     }
 }

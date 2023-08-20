@@ -23,14 +23,20 @@ export const Signin = ({setIsLogged}) => {
         })
             .then(res => res.json())
             .then(data => {
-                    console.log(data);
+                    console.log("LOGIN DATA => ",data.data[0].id);
                     if (data.status !== 200) {
                         alert("Wrong username or password");
                         return;
                     }
-                    setIsLogged(true);
-                    sessionStorage.setItem("token", data.data.id + data.data.username + data.data.email);
-                    navigate("/");
+                    if(data?.data[0]?.id) {
+                        setIsLogged(true);
+                        // je créer un faux token, pas le temps de faire un jwt pour ce projet repris rapidement
+                        sessionStorage.setItem("token", data.data[0].id + data.data[0].username + data.data[0].email);
+                        sessionStorage.setItem("userId", data.data[0].id);
+                        navigate("/");
+                        return;
+                    }
+                    alert("An error occured, please try again later");
                 }
             )
     }

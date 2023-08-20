@@ -6,6 +6,8 @@ import {Signup} from "./Pages/Signup.jsx";
 import {useEffect, useState} from "react";
 import AuthRequired from "./Auth/AuthRequired.jsx";
 import {FlatshareDetails} from "./Pages/FlatshareDetails.jsx";
+import {MyFlatshares} from "./Pages/MyFlatshares.jsx";
+import {MyFlatshareDetails} from "./Pages/MyFlatshareDetails.jsx";
 
 function App() {
 
@@ -25,17 +27,27 @@ function App() {
 
     return (
         <>
-            {<Navbar isLogged={isLogged}/>}
+            {<Navbar isLogged={isLogged} setIsLogged={setIsLogged} />}
             <div className={` px-8 py-4 `}>
                 <Routes>
                     <Route path="/" element={
                         <AuthRequired>
-                            <Home flatshares={flatshares} setFlatshares={setFlatshares} />
+                            <Home flatshares={flatshares} />
                         </AuthRequired>
                     }/>
                     <Route path="/flatshare/:id" element={
                         <AuthRequired>
                             <FlatshareDetails flatshares={flatshares} />
+                        </AuthRequired>
+                    }/>
+                    <Route path="/myflatshares" element={
+                        <AuthRequired>
+                            <MyFlatshares flatshares={flatshares} setFlatshares={setFlatshares} />
+                        </AuthRequired>
+                    }/>
+                    <Route path="/myflatsharedetails/:id" element={
+                        <AuthRequired>
+                            <MyFlatshareDetails flatshares={flatshares} />
                         </AuthRequired>
                     }/>
                     <Route path="/signin" element={<Signin setIsLogged={setIsLogged}/>}/>

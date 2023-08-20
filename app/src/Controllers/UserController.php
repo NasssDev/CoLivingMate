@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Factories\PDOFactory;
+use App\Managers\FlatshareManager;
 use App\Managers\UserManager;
 use App\Managers\SessionManager;
 use App\Routes\Route;
@@ -22,7 +23,7 @@ class UserController extends AbstractController
     {
         $sessionManager = new SessionManager();
         $sessionManager->logout();
-        header("location: /" );
+        header("location: /");
 
     }
 
@@ -32,7 +33,7 @@ class UserController extends AbstractController
 
         $username = filter_input(INPUT_POST, "username");
         $pwd = filter_input(INPUT_POST, "pwd");
-        $pwd_hash =  password_hash($pwd, PASSWORD_DEFAULT);
+        $pwd_hash = password_hash($pwd, PASSWORD_DEFAULT);
 
         $userManager = new UserManager(new PDOFactory());
         $sessionManager = new SessionManager();
@@ -40,18 +41,17 @@ class UserController extends AbstractController
         $login = filter_input(INPUT_POST, "login");
         $getUser = $userManager->readUser($username);
 //        var_dump($getUser);die;
-        if($getUser !== false){
-            if (!password_verify($pwd, $getUser->getPwd())){
+        if ($getUser !== false) {
+            if (!password_verify($pwd, $getUser->getPwd())) {
                 $this->renderJson("Identifiants incorrects", 403);
-            }
-            elseif(password_verify($pwd, $getUser->getPwd())){
+            } elseif (password_verify($pwd, $getUser->getPwd())) {
                 $sessionManager->login($username);
                 $getUserInfo = $userManager->readUserReturn($username);
 
                 $this->renderJson([$getUserInfo]);
-            }  
-        }else{
-            $this->renderJson("Identifiants incorrects",403 );
+            }
+        } else {
+            $this->renderJson("Identifiants incorrects", 403);
         }
     }
 
@@ -65,16 +65,16 @@ class UserController extends AbstractController
 
         $username = filter_input(INPUT_POST, "username");
         $pwd = filter_input(INPUT_POST, "pwd");
-        $pwd_hash =  password_hash($pwd, PASSWORD_DEFAULT);
+        $pwd_hash = password_hash($pwd, PASSWORD_DEFAULT);
 
         $userManager = new UserManager(new PDOFactory());
 
         $signin = filter_input(INPUT_POST, "signin");
         $getUser = $userManager->readUser($username);
 
-        if($getUser){
+        if ($getUser) {
             $this->renderJson("Ce pseudo est déja utilisé, veuillez en choisir un autre.", 403);
-        }else{
+        } else {
             $userManager->creatUser($username, $pwd_hash, $firstname, $lastname, $email, $birthdate);
 
             $getUserInfo = $userManager->readUserReturn($username);
@@ -89,7 +89,7 @@ class UserController extends AbstractController
 
         $update_username = filter_input(INPUT_POST, "username");
         $update_pwd = filter_input(INPUT_POST, "pwd");
-        $update_pwd_hash =  password_hash($update_pwd, PASSWORD_DEFAULT);
+        $update_pwd_hash = password_hash($update_pwd, PASSWORD_DEFAULT);
 
 
         $userManager = new UserManager(new PDOFactory());
@@ -97,13 +97,34 @@ class UserController extends AbstractController
         $resmdp = filter_input(INPUT_POST, "resmdp");
 
 
-        if($resmdp){
+        if ($resmdp) {
             $userManager->updatePwd($update_username, $update_pwd_hash);
-            header("location: /login" );
+            header("location: /login");
 
         }
-
     }
 
+    #[Route('/count_roommate', name: "count", methods: ["POST", "GET"])]
+    public function countRoommate()
+    {
+
+        $id_flatshare = filter_input(INPUT_GET, "id_flatshare");
+
+
+        $userManager = new UserManager(new PDOFactory());
+
+        $flatshareManager = new FlatshareManager(new PDOFactory());
+
+        $result = $flatshareManager->selectOneFlatshare($id_flatshare);
+
+        if ($result instanceof \Exception) {
+            $this->renderJson("Erreur lors de la récupération de la colocation, vérfiez qu'elle est toujours active ou existante !", 503);
+            die;
+        }
+
+        $data = $userManager->countUser($id_flatshare);
+
+        $this->renderJson($data);
+    }
 }
 
