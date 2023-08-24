@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {RoommatesList} from "../Components/RoommatesList.jsx";
 import {FeesList} from "../Components/FeesList.jsx";
 import {ExpendituresList} from "../Components/ExpendituresList.jsx";
@@ -31,12 +31,12 @@ export const MyFlatshareDetails = () => {
         fetch(`http://localhost:1200/select_infos?id_flatshare=${id_flatshare}`)
             .then(res => res.json())
             .then(data => {
-                setMyFlatshare(data.data);
-                fetch(`http://localhost:1200/count_roommate?id_flatshare=${id_flatshare}`)
-                    .then(res => res.json())
-                    .then(data2 => {
-                        setRoommateNumber(data2.data);
-                    })
+                    setMyFlatshare(data.data);
+                    fetch(`http://localhost:1200/count_roommate?id_flatshare=${id_flatshare}`)
+                        .then(res => res.json())
+                        .then(data2 => {
+                            setRoommateNumber(data2.data);
+                        })
                 }
             )
     }, []);
@@ -87,20 +87,44 @@ export const MyFlatshareDetails = () => {
                 <hr className=" border-2 border-indigo-300 rounded-r-lg rounded-l-lg"/>
                 <div className="py-4">
                     <div className="flex flex-row flex-wrap">
-                        <div className="h-full w-full flex flex-col">
+                        <div className="h-full w-full flex flex-col relative">
+                            <div className="absolute right-0 lg:right-5">
+                                <div className={"group flex relative"}>
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                         strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                                         className="text-gray-600 hover:text-indigo-500 hover:cursor-pointer">
+                                        <line x1="21" x2="14" y1="4" y2="4"/>
+                                        <line x1="10" x2="3" y1="4" y2="4"/>
+                                        <line x1="21" x2="12" y1="12" y2="12"/>
+                                        <line x1="8" x2="3" y1="12" y2="12"/>
+                                        <line x1="21" x2="16" y1="20" y2="20"/>
+                                        <line x1="12" x2="3" y1="20" y2="20"/>
+                                        <line x1="14" x2="14" y1="2" y2="6"/>
+                                        <line x1="8" x2="8" y1="10" y2="14"/>
+                                        <line x1="16" x2="16" y1="18" y2="22"/>
+                                    </svg>
+                                    <span
+                                        className="group-hover:opacity-100 transition-opacity bg-gray-100 px-1 text-sm text-indigo-700 rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full opacity-0 m-3 mx-auto">
+                                        Modify
+                                    </span>
+                                </div>
+                            </div>
                             <div className={`grid sm:grid-cols-3 lg:grid-cols-4`}>
                                 <div className={`flex flex-col items-center`}>
-                                    <h1 className="font-semibold text-lg text-indigo-800 tracking-wide">Roommates list :</h1>
+                                    <h1 className="font-semibold text-lg text-indigo-800 tracking-wide">Roommates list
+                                        :</h1>
                                     <RoommatesList ListClassName={''} myFlatshare={myFlatshare}/>
                                 </div>
                                 <hr className="sm:hidden my-6 border-2 border-gray-300 rounded-r-lg rounded-l-lg"/>
-                                <div className={`flex flex-col sm:border-l-2 sm:border-l-gray-700 items-center`}>
-                                    <h1 className="font-semibold text-lg text-indigo-800 tracking-wide">Monthly fees :</h1>
+                                <div className={`flex flex-col sm:border-l-2 sm:border-l-gray-300 items-center`}>
+                                    <h1 className="font-semibold text-lg text-indigo-800 tracking-wide">Monthly fees
+                                        :</h1>
                                     <FeesList ListClassName={'text-center'} myFlatshare={myFlatshare}/>
                                 </div>
                                 <hr className="sm:hidden my-6 border-2 border-gray-300 rounded-r-lg rounded-l-lg"/>
-                                <div className={`flex flex-col sm:border-l-2 sm:border-l-gray-700  items-center`}>
-                                    <h1 className="font-semibold text-lg text-indigo-800 tracking-wide">Expenditures :</h1>
+                                <div className={`flex flex-col sm:border-l-2 sm:border-l-gray-300  items-center`}>
+                                    <h1 className="font-semibold text-lg text-indigo-800 tracking-wide">Expenditures
+                                        :</h1>
                                     <ExpendituresList ListClassName={'text-center'} myFlatshare={myFlatshare}/>
                                 </div>
                             </div>

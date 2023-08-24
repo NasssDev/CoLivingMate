@@ -11,12 +11,11 @@ export const Navbar = ({isLogged, setIsLogged}) => {
 
     return (
         <nav className="relative bg-white shadow ">
-            <div className="container px-6 py-3 mx-auto md:flex">
+            <div className="container px-6 py-1.5 mx-auto md:flex">
                 <div className="flex items-center justify-between">
-                    <Link to="#" className={``}>
-                        CoLivingMate
+                    <Link to="/">
+                        <img alt={"brand-colivingmate"} src={"/CoLivingMate.png"} className={" h-16 w-24"} />
                     </Link>
-
                     {isLogged && (
                         <div className="flex lg:hidden">
                             <button
@@ -41,7 +40,7 @@ export const Navbar = ({isLogged, setIsLogged}) => {
                 </div>
                 {isLogged && (
                     <div
-                        className={`absolute inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white md:mt-0 md:p-0 md:top-0 md:relative md:opacity-100 md:translate-x-0 md:flex md:items-center md:justify-between ${isOpen ? 'translate-x-0 opacity-100' : 'opacity-0 -translate-x-full'}`}>
+                        className={`absolute inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white shadow md:mt-0 md:p-0 md:top-0 md:relative md:opacity-100 md:translate-x-0 md:flex md:items-center md:justify-between md:shadow-none ${isOpen ? 'translate-x-0 opacity-100' : 'opacity-0 -translate-x-full'}`}>
                         <div className="flex flex-col px-2 -mx-4 md:flex-row md:mx-10 md:py-0">
                             <Link to="/"
                                   className="px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg  hover:bg-gray-100  md:mx-2">
@@ -51,13 +50,14 @@ export const Navbar = ({isLogged, setIsLogged}) => {
                                   className="px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg hover:bg-gray-100 md:mx-2">
                                 My Flat shares
                             </Link>
-                            <Link to="#"
+                            <Link to="/profile"
                                   className="px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg hover:bg-gray-100 md:mx-2">
                                 Profile
                             </Link>
                         </div>
 
                         <div className="relative mt-4 md:mt-0">
+
                         <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                             <svg className="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="none">
                                 <path
@@ -68,15 +68,22 @@ export const Navbar = ({isLogged, setIsLogged}) => {
                             <div className={"flex flex-row items-center"}>
                                 <input
                                     type="text"
-                                    className="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border rounded-lg  focus:border-indigo-400 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-indigo-300"
+                                    className="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border rounded-lg mr-6 focus:border-indigo-400 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-indigo-300"
                                     placeholder="Search"
                                 />
-                                <svg width="30" height="30" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                                     strokeLinejoin="round" className="lucide lucide-power hover:text-red-600 hover:cursor-pointer ml-6">
-                                    <path d="M18.36 6.64a9 9 0 1 1-12.73 0"/>
-                                    <line x1="12" x2="12" y1="2" y2="12"/>
-                                </svg>
+                                <div className="group flex relative w-fit">
+                                    <svg width="28" height="28" viewBox="0 0 24 24" onClick={handleLogout}
+                                         fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                                         strokeLinejoin="round"
+                                         className="hover:text-red-600 hover:cursor-pointer ">
+                                        <path d="M18.36 6.64a9 9 0 1 1-12.73 0"/>
+                                        <line x1="12" x2="12" y1="2" y2="12"/>
+                                    </svg>
+                                    <span
+                                        className="group-hover:opacity-100 transition-opacity bg-gray-100 px-1 text-sm text-indigo-700 rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full opacity-0 m-4 mx-auto">
+                                        Logout
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>

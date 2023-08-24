@@ -7,6 +7,7 @@ use App\Managers\FlatshareManager;
 use App\Managers\UserManager;
 use App\Managers\SessionManager;
 use App\Routes\Route;
+use Exception;
 
 class UserController extends AbstractController
 {
@@ -15,7 +16,6 @@ class UserController extends AbstractController
     {
         $sessionManager = new SessionManager();
         $logStatut = $sessionManager->check_login();
-
     }
 
     #[Route('/logout', name: "logout", methods: ["GET"])]
@@ -43,7 +43,7 @@ class UserController extends AbstractController
 //        var_dump($getUser);die;
         if ($getUser !== false) {
             if (!password_verify($pwd, $getUser->getPwd())) {
-                $this->renderJson("Identifiants incorrects", 403);
+                $this->renderJson("Username ou Password incorrect !", 403);
             } elseif (password_verify($pwd, $getUser->getPwd())) {
                 $sessionManager->login($username);
                 $getUserInfo = $userManager->readUserReturn($username);
@@ -51,7 +51,7 @@ class UserController extends AbstractController
                 $this->renderJson([$getUserInfo]);
             }
         } else {
-            $this->renderJson("Identifiants incorrects", 403);
+            $this->renderJson("Username ou Password incorrect !", 403);
         }
     }
 
@@ -69,39 +69,53 @@ class UserController extends AbstractController
 
         $userManager = new UserManager(new PDOFactory());
 
-        $signin = filter_input(INPUT_POST, "signin");
         $getUser = $userManager->readUser($username);
 
         if ($getUser) {
-            $this->renderJson("Ce pseudo est déja utilisé, veuillez en choisir un autre.", 403);
-        } else {
+            $this->renderJson("This username is already in use, please choose another one !", 403);
+            die;
+        }
+
+        if($username && $pwd_hash && $firstname && $lastname && $email && $birthdate){
             $userManager->creatUser($username, $pwd_hash, $firstname, $lastname, $email, $birthdate);
 
             $getUserInfo = $userManager->readUserReturn($username);
 
-            $this->renderJson([$getUserInfo]);
+            $this->renderJson($getUserInfo);
         }
     }
 
-    #[Route('/respwd', name: "respwd", methods: ["POST"])]
-    public function signin3()
+    /**
+     * @return void
+     * @throws Exception
+     */
+    #[Route('/change_pwd', name: "changepwd", methods: ["POST"])]
+    public function changePwd()
     {
 
-        $update_username = filter_input(INPUT_POST, "username");
-        $update_pwd = filter_input(INPUT_POST, "pwd");
-        $update_pwd_hash = password_hash($update_pwd, PASSWORD_DEFAULT);
+        $id_roommate = filter_input(INPUT_POST, "id_roommate");
+        $old_pwd = filter_input(INPUT_POST, "old_pwd");
+        $new_pwd = filter_input(INPUT_POST, "new_pwd");
+        $new_pwd_hash = password_hash($new_pwd, PASSWORD_DEFAULT);
 
 
         $userManager = new UserManager(new PDOFactory());
 
-        $resmdp = filter_input(INPUT_POST, "resmdp");
+        $user = $userManager->readUserById($id_roommate);
 
-
-        if ($resmdp) {
-            $userManager->updatePwd($update_username, $update_pwd_hash);
-            header("location: /login");
-
+        if ($user instanceof Exception) {
+            $this->renderJson("Error while recovering the account, verify that it is still active or existing !", 503);
+            die;
         }
+
+        if (!password_verify($old_pwd, $user->getPwd())) {
+            $this->renderJson("Error, the password is not correct !", 503);
+            die;
+        }
+
+        $userManager->updatePwd($id_roommate, $new_pwd_hash);
+
+        $this->renderJson("The password has been changed successfully !");
     }
 
     #[Route('/count_roommate', name: "count", methods: ["POST", "GET"])]
@@ -117,7 +131,7 @@ class UserController extends AbstractController
 
         $result = $flatshareManager->selectOneFlatshare($id_flatshare);
 
-        if ($result instanceof \Exception) {
+        if ($result instanceof Exception) {
             $this->renderJson("Erreur lors de la récupération de la colocation, vérfiez qu'elle est toujours active ou existante !", 503);
             die;
         }
@@ -125,6 +139,54 @@ class UserController extends AbstractController
         $data = $userManager->countUser($id_flatshare);
 
         $this->renderJson($data);
+    }
+
+    #[Route('/get_roommate', name: "getRoommate", methods: ["POST", "GET"])]
+    public function getRoommate()
+    {
+
+        $id_roommate = filter_input(INPUT_GET, "id_roommate");
+
+        $userManager = new UserManager(new PDOFactory());
+
+        $result = $userManager->readUserByIdReturn($id_roommate);
+
+        if ($result instanceof Exception) {
+            $this->renderJson("Erreur lors de la récupération du compte, vérfiez qu'il est toujours actif ou existant !", 503);
+            die;
+        }
+
+        $this->renderJson($result);
+    }
+
+    #[Route('/update_roommate', name: "updateRoommate", methods: ["POST"])]
+    public function updateRoommate()
+    {
+
+        $id_roommate = intval(filter_input(INPUT_POST, "id_roommate"));
+        $firstname = filter_input(INPUT_POST, "firstname");
+        $lastname = filter_input(INPUT_POST, "lastname");
+        $email = filter_input(INPUT_POST, "email");
+        $birthdate = filter_input(INPUT_POST, "birthdate");
+        $username = filter_input(INPUT_POST, "username");
+
+        $userManager = new UserManager(new PDOFactory());
+
+        $result = $userManager->readUserById($id_roommate);
+
+        if ($result instanceof Exception) {
+            $this->renderJson("Error while recovering the account, verify that it is still active or existing!", 503);
+            die;
+        }
+
+        if ($firstname && $lastname && $email && $birthdate && $username) {
+            $userManager->updateUser($id_roommate, $username, $lastname, $firstname, $email, $birthdate);
+        } else {
+            $this->renderJson("Error, make sure that the 'username', 'lastname', 'firstname', 'email' and 'birthdate' fields are filled in correctly!", 503);
+            die;
+        }
+
+        $this->renderJson("Change made successfully !");
     }
 }
 
