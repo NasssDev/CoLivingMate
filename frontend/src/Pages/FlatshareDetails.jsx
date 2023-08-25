@@ -1,9 +1,15 @@
 import {useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
 
 export const FlatshareDetails = ({flatshares}) => {
 
-    const id = window.location.pathname.split("/")[2];
+    const {id_flatshare} = useParams();
+
     const [currentFlatshare, setCurrentFlatshare] = useState({});
+
+    const [roommates, setRoommates] = useState([]);
+
+    const [emailOwner, setEmailOwner] = useState("");
 
     const [selectedImage, setSelectedImage] = useState(`https://source.unsplash.com/600x300/?house,${currentFlatshare.name}`);
 
@@ -20,18 +26,20 @@ export const FlatshareDetails = ({flatshares}) => {
     };
 
     useEffect(() => {
-        fetch("http://localhost:1200/select_infos?id_flatshare=" + id)
+        fetch("http://localhost:1200/select_infos?id_flatshare=" + id_flatshare)
             .then(res => res.json())
             .then(data => {
-
                     setCurrentFlatshare(data.data[0]);
-                    setCurrentFlatshare(current => {
-                        console.log("TABLEAU : ", data.data[0])
-                        return current;
-                    });
+                    setRoommates(JSON.parse(data.data[0].roommates));
                 }
             )
     }, [])
+
+
+    useEffect(() => {
+        const emailOfOwner = roommates.find(roommate => roommate.roommate_role === 1)?.roommate_email;
+        setEmailOwner(emailOfOwner);
+    }, [roommates])
 
     return (
         <div className="h-full min-h-screen bg-white">
@@ -76,7 +84,7 @@ export const FlatshareDetails = ({flatshares}) => {
                     </div>
                 </div>
                 <div>
-                    <a href={`mailto:${currentFlatshare.roommate_email}`}
+                    <a href={`mailto:${emailOwner}`}
                        className="bg-indigo-500 text-lg text-white px-6 py-2 rounded-lg mt-4  hover:bg-indigo-600 transition duration-300">Send
                         a message</a>
                 </div>

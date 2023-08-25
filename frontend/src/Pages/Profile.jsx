@@ -1,20 +1,14 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {SuccessPop} from "../Components/Popup/SuccessPop.jsx";
 import {ErrorPop} from "../Components/Popup/ErrorPop.jsx";
 import {FormModifyProfile} from "../Components/Forms/FormModifyProfile.jsx";
 import {FormModifyPassword} from "../Components/Forms/FormModifyPassword.jsx";
+import {MessageStateContext} from "../Utils/Context.jsx";
 
-export const Profile = (
-    {
-        successPop,
-        setSuccessPop,
-        errorPop,
-        setErrorPop,
-        errorMessage,
-        setErrorMessage,
-        setSuccessMessage,
-        successMessage
-    }) => {
+export const Profile = () => {
+
+    const {successPop, setSuccessPop, errorPop, setErrorPop, errorMessage,setErrorMessage,setSuccessMessage,successMessage} = useContext(MessageStateContext)
+
 
     const [formData, setFormData] = useState({
         firstname: "",

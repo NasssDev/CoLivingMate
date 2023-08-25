@@ -118,7 +118,8 @@ class FlatshareController extends AbstractController
     #[Route('/select_infos', name: "selectinfos", methods: ["GET", "POST"])]
     public function selectInfos()
     {
-        $id_flatshare = $_REQUEST['id_flatshare'];
+        $id_flatshare = intval($_REQUEST['id_flatshare']);
+
 
         $flatshareManager = new FlatshareManager(new PDOFactory());
 
@@ -182,7 +183,7 @@ class FlatshareController extends AbstractController
         $result = $userManager->readUserEmail($email_new_roommate);
 
         if ($result instanceof \Exception) {
-            $this->renderJson("Nous n'arrivons pas à effectuer l'ajout du collocataire, vérifiez que le compte du collocataire est toujours existant !", 401);
+            $this->renderJson("We are unable to add the roommate, check that the roommate's account is still existing or active !", 401);
             die;
         }
 
@@ -195,7 +196,7 @@ class FlatshareController extends AbstractController
         $result = $flatshareManager->selectOneFlatshare($id_flatshare);
 
         if ($result instanceof \Exception) {
-            $this->renderJson("Nous n'arrivons pas à effectuer l'ajout du collocataire vérifiez que la collocation est toujours existante !", 401);
+            $this->renderJson("We are unable to add the roommate, check that the flat share is still existing or active !", 401);
             die;
         }
 
@@ -204,12 +205,12 @@ class FlatshareController extends AbstractController
         $result = $flatshareManager->insertRoomateHasFlatshare($id_flatshare, $id_new_roommate, $role);
 
         if ($result instanceof \Exception) {
-            $this->renderJson("Un problème est survenu lors de l'ajout du nouveau collocataire, vérifiez qu'il ne fait pas déjà partie de la collocation, sinon, veuillez réessayer !", 401);
+            $this->renderJson("A problem occurred while adding the new roommate, check that he is not already part of the roommate, if not, please try again!", 401);
             die;
         }
 
         // all success //
-        $this->renderJson("Le collocataire $roommateName a été ajouté avec succès dans la collocation $flatshareName !");
+        $this->renderJson("Roommate $roommateName added successfully in flat share : $flatshareName !");
     }
 
     #[Route('/kick_roommate', name: "kickRoommate", methods: ["POST", "GET"])]
@@ -249,7 +250,7 @@ class FlatshareController extends AbstractController
         }
 
         // all success //
-        $this->renderJson("Le collocataire $roommateName a été supprimé avec succès de la collocation $flatshareName !");
+        $this->renderJson("Roommate $roommateName has been successfully kicked of flat share : $flatshareName !");
     }
 
     #[Route('/select_all_roommate', name: "kickRoommate", methods: ["POST", "GET"])]

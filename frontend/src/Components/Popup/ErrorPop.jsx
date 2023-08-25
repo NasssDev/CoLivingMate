@@ -4,10 +4,14 @@ export const ErrorPop = ({message, setErrorPop}) => {
 
     const ErrorRef = useRef(null);
     useEffect(() => {
+
         setTimeout(() => {
-            ErrorRef.current.remove();
-            setErrorPop(false);
+            if (ErrorRef.current) {
+                ErrorRef.current.remove();
+                setErrorPop(false);
+            }
         }, 5000);
+
     }, []);
 
     return (

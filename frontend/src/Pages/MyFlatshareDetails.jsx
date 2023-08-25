@@ -2,11 +2,11 @@ import React, {useEffect, useState} from "react";
 import {RoommatesList} from "../Components/RoommatesList.jsx";
 import {FeesList} from "../Components/FeesList.jsx";
 import {ExpendituresList} from "../Components/ExpendituresList.jsx";
-import {Link, Outlet} from "react-router-dom";
+import {Link, Outlet, useParams} from "react-router-dom";
 
 export const MyFlatshareDetails = () => {
 
-    const id_flatshare = window.location.pathname.split("/")[2];
+    const {id_flatshare} = useParams();
 
     const [myFlatshare, setMyFlatshare] = useState([]);
 

@@ -1,17 +1,13 @@
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {ButtonForm} from "../Components/ButtonForm.jsx";
 import {InputForm} from "../Components/InputForm.jsx";
 import {Link} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
 import {ErrorPop} from "../Components/Popup/ErrorPop.jsx";
-export const Signin = (
-    {
-        setIsLogged,
-        errorMessage,
-        setErrorMesssage,
-        errorPop,
-        setErrorPop
-    }) => {
+import {MessageStateContext} from "../Utils/Context.jsx";
+export const Signin = ({ setIsLogged }) => {
+
+    const {errorPop, setErrorPop, errorMessage,setErrorMessage} = useContext(MessageStateContext);
 
     const [formData, setFormData] = useState({username: "", pwd: ""});
 
@@ -32,7 +28,7 @@ export const Signin = (
             .then(res => res.json())
             .then(data => {
                     if (data.status !== 200) {
-                        setErrorMesssage(data.data[0]);
+                        setErrorMessage(data.data[0]);
                         setErrorPop(true);
                         return;
                     }

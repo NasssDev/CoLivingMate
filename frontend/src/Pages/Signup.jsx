@@ -1,21 +1,15 @@
 import {InputForm} from "../Components/InputForm.jsx";
 import {ButtonForm} from "../Components/ButtonForm.jsx";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {Link, Navigate} from "react-router-dom";
 import {ErrorPop} from "../Components/Popup/ErrorPop.jsx";
 import {SuccessPop} from "../Components/Popup/SuccessPop.jsx";
+import {MessageStateContext} from "../Utils/Context.jsx";
 
-export const Signup = (
-    {
-        successPop,
-        setSuccessPop,
-        errorPop,
-        setErrorPop,
-        errorMessage,
-        setErrorMessage,
-        setSuccessMessage,
-        successMessage
-    }) => {
+export const Signup = () => {
+
+    const {successPop, setSuccessPop, errorPop, setErrorPop, errorMessage,setErrorMessage,setSuccessMessage,successMessage} = useContext(MessageStateContext);
+
 
     const [formData, setFormData] = useState({
         firstname: "",

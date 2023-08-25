@@ -1,31 +1,32 @@
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {ModalMessage} from "./ModalMessage.jsx";
+import {SuccessPop} from "./Popup/SuccessPop.jsx";
+import {MessageStateContext} from "../Utils/Context.jsx";
 
-export const RoommatesList = ({roommates, listClassName}) => {
+export const RoommatesList = (
+    {
+        roommates,
+        listClassName,
+    }
+) => {
+
+    const {closePopup, successPop, setSuccessPop, setSuccessMessage,successMessage} = useContext(MessageStateContext);
+
 
     const [confirmDelete, setConfirmDelete] = useState(false);
 
-    const handleConfirm = () => {
-        fetch("http://localhost:1200/kick_roommate", {
-            method: 'POST',
-            headers: new Headers({
-                "Content-type": "application/x-www-form-urlencoded"
-            }),
-            credentials: "include",
-            body: new URLSearchParams({
-                id_roommate: roommates[0].roommate_id,
-                id_flatshare: roommates[0].flatshare_id
-            })
-        })
+    const handleConfirm = (email_roommate, id_flatshare) => {
+        fetch(`http://localhost:1200/kick_roommate?email_roommate=${email_roommate}&id_flatshare=${id_flatshare}`)
             .then(res => res.json())
             .then(data => {
                 if (data.status !== 200) {
-                    console.log('en attendant');
+                    console.error('Error :', data.data[0]);
                     return;
                 }
+                setSuccessMessage(data.data[0]);
+                setSuccessPop(true);
                 setConfirmDelete(false);
             })
-
     }
 
     return (<>
@@ -42,7 +43,8 @@ export const RoommatesList = ({roommates, listClassName}) => {
                             {"Joined : " + roommate?.roommate_joindate}
                         </p>
                         <svg key={index + "svg"} onClick={() => {
-                            setConfirmDelete(true)
+                            setConfirmDelete(true);
+                            // handleConfirm(roommate?.roommate_email, roommate?.roommate_flat_share_id);
                         }}
                              width="24" height="24" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
@@ -58,6 +60,11 @@ export const RoommatesList = ({roommates, listClassName}) => {
             {confirmDelete &&
                 <ModalMessage message={"Are you sure that you want to kick this roommate ?"} buttonName={"Confirm"}
                               setConfirmDelete={setConfirmDelete} handleAction={handleConfirm}/>
+            }
+            {successPop &&
+                <div onClick={closePopup} className={"inset-0 flex items-end justify-center fixed mb-2 "}>
+                    <SuccessPop setSuccessPop={setSuccessPop} message={successMessage}/>
+                </div>
             }
         </>
     )

@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 
 export const Navbar = ({isLogged, setIsLogged}) => {
     const [isOpen, setIsOpen] = useState(false);
+
+    const location = useLocation();
 
     const handleLogout = () => {
         sessionStorage.removeItem("token");
@@ -43,15 +45,15 @@ export const Navbar = ({isLogged, setIsLogged}) => {
                         className={`absolute inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white shadow md:mt-0 md:p-0 md:top-0 md:relative md:opacity-100 md:translate-x-0 md:flex md:items-center md:justify-between md:shadow-none ${isOpen ? 'translate-x-0 opacity-100' : 'opacity-0 -translate-x-full'}`}>
                         <div className="flex flex-col px-2 -mx-4 md:flex-row md:mx-10 md:py-0">
                             <Link to="/"
-                                  className="px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg  hover:bg-gray-100  md:mx-2">
+                                  className={`${location.pathname === "/" && "font-bold text-lg text-amber-600 drop-shadow-lg hover:font-bold"} px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg hover:font-semibold hover:text-amber-600 md:mx-2`}>
                                 Home
                             </Link>
                             <Link to="/myflatshares"
-                                  className="px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg hover:bg-gray-100 md:mx-2">
+                                  className={`${location.pathname.includes("/myflatshare") && "font-bold text-lg text-amber-600 drop-shadow-lg hover:font-bold"} px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg hover:font-semibold hover:text-amber-600 md:mx-2`}>
                                 My Flat shares
                             </Link>
                             <Link to="/profile"
-                                  className="px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg hover:bg-gray-100 md:mx-2">
+                                  className={`${location.pathname === "/profile" && "font-bold text-lg text-amber-600 drop-shadow-lg hover:font-bold"} px-2.5 py-2 text-gray-700 transition-colors duration-150 transform rounded-lg hover:font-semibold hover:text-amber-600 md:mx-2`}>
                                 Profile
                             </Link>
                         </div>

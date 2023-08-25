@@ -1,20 +1,13 @@
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {ErrorPop} from "../Components/Popup/ErrorPop.jsx";
 import {SuccessPop} from "../Components/Popup/SuccessPop.jsx";
 import {InputForm} from "../Components/InputForm.jsx";
 import {ButtonForm} from "../Components/ButtonForm.jsx";
+import {MessageStateContext} from "../Utils/Context.jsx";
 
-export const CreateFlatshare = (
-    {
-        successPop,
-        setSuccessPop,
-        errorPop,
-        setErrorPop,
-        errorMessage,
-        setErrorMessage,
-        setSuccessMessage,
-        successMessage
-    }) => {
+export const CreateFlatshare = () => {
+
+    const {successPop, setSuccessPop, errorPop, setErrorPop, errorMessage,setErrorMessage,setSuccessMessage,successMessage} = useContext(MessageStateContext)
 
     const [formData, setFormData] = useState({
         name: "",
