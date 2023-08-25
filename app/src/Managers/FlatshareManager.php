@@ -213,52 +213,54 @@ class FlatshareManager extends BaseManager
     fs.zip_code AS flat_share_zip_code,
     fs.start_date AS flat_share_start_date,
     fs.end_date AS flat_share_end_date,
-    rmf.roommate_id AS roommate_id,
-    rmf.flat_share_id AS roommate_flat_share_id,
-    rmf.role AS roommate_role,
-    rmf.rent_pro_rata AS roommate_rent_pro_rata,
-    rmf.entry_date AS roommate_entry_date,
-    rmf.exit_date AS roommate_exit_date,
-    rm.username AS roommate_username,
-    rm.pwd AS roommate_pwd,
-    rm.lastname AS roommate_lastname,
-    rm.firstname AS roommate_firstname,
-    rm.email AS roommate_email,
-    rm.birthdate AS roommate_birthdate,
-    rm.joindate AS roommate_joindate,
-    (
-        SELECT JSON_ARRAYAGG(
-            JSON_OBJECT(
-                'expenditure_id', exp.id,
-                'expenditure_name', exp.expenditure_name,
-                'expenditure_amount', exp.amount,
-                'expenditure_creation_date', exp.creation_date,
-                'expenditure_payed', exp.payed,
-                'expenditure_uniqId', exp.uniqId
+    JSON_ARRAYAGG(
+        JSON_OBJECT(
+            'roommate_id', rmf.roommate_id,
+            'roommate_flat_share_id', rmf.flat_share_id,
+            'roommate_role', rmf.role,
+            'roommate_rent_pro_rata', rmf.rent_pro_rata,
+            'roommate_entry_date', rmf.entry_date,
+            'roommate_exit_date', rmf.exit_date,
+            'roommate_username', rm.username,
+            'roommate_pwd', rm.pwd,
+            'roommate_lastname', rm.lastname,
+            'roommate_firstname', rm.firstname,
+            'roommate_email', rm.email,
+            'roommate_birthdate', rm.birthdate,
+            'roommate_joindate', rm.joindate,
+            'expenditures', (
+                SELECT JSON_ARRAYAGG(
+                    JSON_OBJECT(
+                        'expenditure_id', exp.id,
+                        'expenditure_name', exp.expenditure_name,
+                        'expenditure_amount', exp.amount,
+                        'expenditure_creation_date', exp.creation_date,
+                        'expenditure_payed', exp.payed,
+                        'expenditure_uniqId', exp.uniqId
+                    )
+                )
+                FROM expenditure exp
+                WHERE fs.id = exp.flat_share_id AND rm.id = exp.roommate_id
+            ),
+            'monthly_fees', (
+                SELECT JSON_ARRAYAGG(
+                    JSON_OBJECT(
+                        'fee_id', fee.id,
+                        'fee_amount', fee.fee_amount,
+                        'fee_name', fee.fee_name,
+                        'fee_date', fee.date
+                    )
+                )
+                FROM monthly_fee fee
+                WHERE fs.id = fee.flat_share_id
             )
         )
-        FROM expenditure exp
-        WHERE fs.id = exp.flat_share_id AND rm.id = exp.roommate_id
-    ) AS expenditures,
-    (
-        SELECT JSON_ARRAYAGG(
-            JSON_OBJECT(
-                'fee_id', fee.id,
-                'fee_amount', fee.fee_amount,
-                'fee_name', fee.fee_name,
-                'fee_date', fee.date
-            )
-        )
-        FROM monthly_fee fee
-        WHERE fs.id = fee.flat_share_id
-    ) AS monthly_fees
+    ) AS roommates
 FROM flat_share fs
 JOIN roomate_has_flat_share rmf ON fs.id = rmf.flat_share_id
 JOIN roommate rm ON rmf.roommate_id = rm.id
-LEFT JOIN expenditure exp ON fs.id = exp.flat_share_id AND rm.id = exp.roommate_id
-LEFT JOIN monthly_fee fee ON fs.id = fee.flat_share_id
 WHERE fs.id = :id
-GROUP BY fs.id, rmf.roommate_id;
+GROUP BY fs.id;
 ");
 
             $query->bindValue('id', $flatshare_id, \PDO::PARAM_INT);

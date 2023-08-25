@@ -9,8 +9,6 @@ export const MyFlatsharesCard = ({flatshare}) => {
 
     const [monthlyFee, setMonthlyFee] = useState([]);
 
-    console.log("month :::", monthlyFee);
-
     useEffect(() => {
         fetch(`http://localhost:1200/select_all_roommate?id_flatshare=${flatshare.id}`)
             .then(res => res.json())

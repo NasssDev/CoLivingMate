@@ -11,13 +11,13 @@ export const Navbar = ({isLogged, setIsLogged}) => {
 
     return (
         <nav className="relative bg-white shadow ">
-            <div className="container px-6 py-1.5 mx-auto md:flex">
+            <div className="w-full px-6 py-1.5 mx-auto md:flex">
                 <div className="flex items-center justify-between">
                     <Link to="/">
                         <img alt={"brand-colivingmate"} src={"/CoLivingMate.png"} className={" h-16 w-24"} />
                     </Link>
                     {isLogged && (
-                        <div className="flex lg:hidden">
+                        <div className="flex md:hidden">
                             <button
                                 onClick={() => setIsOpen(!isOpen)}
                                 type="button"

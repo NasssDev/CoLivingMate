@@ -10,7 +10,8 @@ import {MyFlatshares} from "./Pages/MyFlatshares.jsx";
 import {MyFlatshareDetails} from "./Pages/MyFlatshareDetails.jsx";
 import {Profile} from "./Pages/Profile.jsx";
 import {Footer} from "./Components/Footer.jsx";
-
+import {CreateFlatshare} from "./Pages/CreateFlatshare.jsx";
+import {ModifyExpenses} from "./Components/ModifyExpenses.jsx";
 
 function App() {
 
@@ -30,7 +31,6 @@ function App() {
         fetch("http://localhost:1200/select_all")
             .then(res => res.json())
             .then(data => {
-                    console.log(data.data)
                     setFlatshares(data.data);
                 }
             )
@@ -38,7 +38,8 @@ function App() {
 
     return (
         <>
-            {<Navbar isLogged={isLogged} setIsLogged={setIsLogged}/>}
+            <div className={"min-h-screen"}>
+                {<Navbar isLogged={isLogged} setIsLogged={setIsLogged}/>}
                 <div className={` px-8 py-4 `}>
                     <Routes>
                         <Route path="/" element={
@@ -55,12 +56,36 @@ function App() {
                             <AuthRequired>
                                 <MyFlatshares flatshares={flatshares} setFlatshares={setFlatshares}/>
                             </AuthRequired>
+                        }>
+                        </Route>
+                        <Route path="myflatshares/create" element={
+                            <AuthRequired>
+                                <CreateFlatshare
+                                    errorPop={errorPop}
+                                    setErrorPop={setErrorPop}
+                                    successPop={successPop}
+                                    setSuccessPop={setSuccessPop}
+                                    errorMessage={errorMessage}
+                                    setErrorMessage={setErrorMessage}
+                                    successMessage={successMessage}
+                                    setSuccessMessage={setSuccessMessage}
+                                />
+                            </AuthRequired>
                         }/>
                         <Route path="/myflatsharedetails/:id" element={
                             <AuthRequired>
                                 <MyFlatshareDetails flatshares={flatshares}/>
                             </AuthRequired>
-                        }/>
+                        }>
+
+                            <Route path="modifyexpenses" element={
+                                <AuthRequired>
+                                    <ModifyExpenses/>
+                                </AuthRequired>
+                            }/>
+                        </Route>
+
+                        />
                         <Route path="/profile" element={
                             <AuthRequired>
                                 <Profile
@@ -105,9 +130,10 @@ function App() {
                                }
                         />
                     </Routes>
-                    <hr/>
-                    <Footer/>
                 </div>
+            </div>
+            <hr/>
+            <Footer/>
         </>
     )
 }

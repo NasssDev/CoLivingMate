@@ -28,23 +28,28 @@ class FlatshareController extends AbstractController
         $result = $userManager->readUserById($id_creator);
 
         if ($result instanceof \Exception) {
-            $this->renderJson('Un problème est survenu lors de la création, problème avec le compte créant la collocation, veuillez réessayer !', 401);
+            $this->renderJson('A problem occurred during the creation, problem with the account creating the collocation, please try again !', 401);
             die;
         }
 
         $flatshareManager = new FlatshareManager(new PDOFactory());
 
-        $result = $flatshareManager->createFlatshare($id_creator, $name, $address, $start_date, $end_date, $city, $zip_code);
+        if ($id_creator && $name && $address && $start_date && $city && $zip_code){
+            $result = $flatshareManager->createFlatshare($id_creator, $name, $address, $start_date, $end_date, $city, $zip_code);
+        }else{
+            $this->renderJson('An error occurred during creation, make sure that "name", "Address", "Start Date", "City" and "Zip Code" are correctly filled !', 401);
+            die;
+        }
 
         if ($result instanceof \Exception) {
-            $this->renderJson('Un problème est survenu lors de la création, veuillez réessayer ! ' . $result->getMessage(), 401);
+            $this->renderJson('A problem occurred while creating, please try again !' . $result->getMessage(), 401);
             die;
         }
 
         $lastInsertFlatshare = $flatshareManager->selectOneFlatshareToReturn($result);
 
         if ($lastInsertFlatshare instanceof \Exception) {
-            $this->renderJson('Créé avec succès, mais il est impossible de récuperer les données !', 555);
+            $this->renderJson('Created successfully, but unable to retrieve data !', 555);
             die;
         }
 
