@@ -174,7 +174,7 @@ class FlatshareController extends AbstractController
     #[Route('/add_roommate', name: "addRoommate", methods: ["POST", "GET"])]
     public function addRoommate()
     {
-        $email_new_roommate = $_REQUEST['new_roomate'];
+        $email_new_roommate = $_REQUEST['new_roommate'];
         $id_flatshare = $_REQUEST['id_flatshare'];
         $role = $_REQUEST['role'] ?? 0;
 
@@ -218,7 +218,7 @@ class FlatshareController extends AbstractController
     {
         $id_flatshare = $_REQUEST['id_flatshare'];
         $email_roommate = $_REQUEST['email_roommate'];
-
+        
         $userManager = new UserManager(new PDOFactory());
 
         $result = $userManager->readUserEmail($email_roommate);

@@ -20,7 +20,6 @@ export const MyFlatsharesCard = ({flatshare}) => {
         fetch(`http://localhost:1200/get_month_fee?id_flatshare=${flatshare.id}`)
             .then(res => res.json())
             .then(data => {
-                    //console.log("Fee :", data.data)
                     setMonthlyFee(data.data);
                 }
             )

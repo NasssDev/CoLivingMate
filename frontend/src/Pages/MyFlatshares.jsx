@@ -25,13 +25,13 @@ export const MyFlatshares = () => {
                     <Link to={"create"}>
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                             className={"rounded-md border-2 border-indigo-500 text-indigo-500 bg-white transition ease-in-out hover:text-white hover:bg-indigo-500 hover:cursor-pointer"}>
+                             className={"rounded-md border-2 shadow-md border-amber-600 text-amber-600 bg-white transition ease-in-out hover:text-white hover:bg-amber-600 hover:cursor-pointer"}>
                             <path d="M5 12h14"/>
                             <path d="M12 5v14"/>
                         </svg>
                     </Link>
                     <span
-                        className="group-hover:opacity-100 transition-opacity bg-gray-100 px-1 text-sm text-indigo-700 rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full opacity-0 -mt-1 mx-auto">
+                        className="group-hover:opacity-100 transition-opacity bg-gray-100 px-1 text-sm text-amber-700 rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full opacity-0 -mt-1 mx-auto">
                         Create flatshare
                     </span>
                 </div>

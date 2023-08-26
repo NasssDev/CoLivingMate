@@ -2,7 +2,8 @@ import React, {useEffect, useState} from "react";
 import {RoommatesList} from "../Components/RoommatesList.jsx";
 import {FeesList} from "../Components/FeesList.jsx";
 import {ExpendituresList} from "../Components/ExpendituresList.jsx";
-import {Link, Outlet, useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
+import {ModifyExpenses} from "../Components/ModifyExpenses.jsx";
 
 export const MyFlatshareDetails = () => {
 
@@ -36,7 +37,6 @@ export const MyFlatshareDetails = () => {
                     setMyFlatshare(data.data[0]);
                     setRoommateNumber(roommatesArray.length);
                     setRoommates(roommatesArray);
-                console.log("BUUG :",roommatesArray);
                 }
             )
     }, []);
@@ -111,7 +111,7 @@ export const MyFlatshareDetails = () => {
                                 <div className={`flex flex-col items-center`}>
                                     <h1 className="font-semibold text-lg text-indigo-800 tracking-wide">Roommates list
                                     </h1>
-                                    <RoommatesList ListClassName={''} roommates={roommates}/>
+                                    <RoommatesList ListClassName={''} id_flatshare={id_flatshare} roommates={roommates}/>
                                 </div>
                                 <hr className="sm:hidden my-6 border-2 border-gray-300 rounded-r-lg rounded-l-lg"/>
                                 <div className={`flex flex-col sm:border-l-2 sm:border-l-gray-300 items-center`}>
@@ -130,7 +130,7 @@ export const MyFlatshareDetails = () => {
                                         <p className="m-auto text-xl text-gray-500">No expenditures yet !</p>}
                                 </div>
                             </div>
-                            <Outlet context={[roommates, setRoommates]}/>
+                            <ModifyExpenses roommates={roommates} />
                         </div>
                     </div>
                 </div>

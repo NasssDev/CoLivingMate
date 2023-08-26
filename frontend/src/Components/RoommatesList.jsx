@@ -7,16 +7,22 @@ export const RoommatesList = (
     {
         roommates,
         listClassName,
+        id_flatshare
     }
 ) => {
 
     const {closePopup, successPop, setSuccessPop, setSuccessMessage,successMessage} = useContext(MessageStateContext);
 
+    const [popupConfirmDelete, setPopupConfirmDelete] = useState(false);
+    const [emailRoommate, setEmailRoommate] = useState("");
 
-    const [confirmDelete, setConfirmDelete] = useState(false);
+    const handleDelete = (email_roommate) => {
+        setPopupConfirmDelete(true);
+        setEmailRoommate(email_roommate);
+    }
 
-    const handleConfirm = (email_roommate, id_flatshare) => {
-        fetch(`http://localhost:1200/kick_roommate?email_roommate=${email_roommate}&id_flatshare=${id_flatshare}`)
+    const handleConfirm = () => {
+        fetch(`http://localhost:1200/kick_roommate?email_roommate=${emailRoommate}&id_flatshare=${id_flatshare}`)
             .then(res => res.json())
             .then(data => {
                 if (data.status !== 200) {
@@ -25,8 +31,8 @@ export const RoommatesList = (
                 }
                 setSuccessMessage(data.data[0]);
                 setSuccessPop(true);
-                setConfirmDelete(false);
-            })
+                setPopupConfirmDelete(false);
+            });
     }
 
     return (<>
@@ -43,8 +49,7 @@ export const RoommatesList = (
                             {"Joined : " + roommate?.roommate_joindate}
                         </p>
                         <svg key={index + "svg"} onClick={() => {
-                            setConfirmDelete(true);
-                            // handleConfirm(roommate?.roommate_email, roommate?.roommate_flat_share_id);
+                            handleDelete(roommate?.roommate_email);
                         }}
                              width="24" height="24" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
@@ -57,11 +62,12 @@ export const RoommatesList = (
                     </li>
                 })}
             </ul>
-            {confirmDelete &&
-                <ModalMessage message={"Are you sure that you want to kick this roommate ?"} buttonName={"Confirm"}
-                              setConfirmDelete={setConfirmDelete} handleAction={handleConfirm}/>
+            {!!popupConfirmDelete &&
+                <ModalMessage
+                    message={"Are you sure that you want to kick this roommate ?"} buttonName={"Confirm"}
+                        setPopupConfirmDelete={setPopupConfirmDelete} handleAction={handleConfirm}/>
             }
-            {successPop &&
+            {!!successPop &&
                 <div onClick={closePopup} className={"inset-0 flex items-end justify-center fixed mb-2 "}>
                     <SuccessPop setSuccessPop={setSuccessPop} message={successMessage}/>
                 </div>
