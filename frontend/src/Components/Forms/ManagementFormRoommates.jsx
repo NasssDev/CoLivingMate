@@ -1,22 +1,18 @@
 import {useContext, useState} from "react";
 import {useParams} from "react-router-dom";
-import {MessageStateContext} from "../../Utils/Context.jsx";
-import {ErrorPop} from "../Popup/ErrorPop.jsx";
-import {SuccessPop} from "../Popup/SuccessPop.jsx";
+import {MessageStateContext, MyFlatsharesDetailsContext} from "../../Utils/Context.jsx";
+
 
 export const ManagementFormRoommates = () => {
 
     const {
-        closePopup,
-        successPop,
         setSuccessPop,
-        errorPop,
         setErrorPop,
-        errorMessage,
         setErrorMessage,
-        successMessage,
         setSuccessMessage
     } = useContext(MessageStateContext);
+
+    const {setInfosModified} = useContext(MyFlatsharesDetailsContext);
 
     const {id_flatshare} = useParams();
 
@@ -34,26 +30,19 @@ export const ManagementFormRoommates = () => {
                     }
                     setSuccessMessage(data.data[0]);
                     setSuccessPop(true);
+                    setInfosModified(current => !current);
                     setNewRoommate("");
                 }
             )
     }
 
     return (<>
-            {!!errorPop &&
-                <div onClick={closePopup} className={"inset-0 flex items-end justify-center fixed mb-2 "}>
-                    <ErrorPop setErrorPop={setErrorPop} message={errorMessage}/>
-                </div>}
-            {!!successPop &&
-                <div onClick={closePopup} className={"inset-0 flex items-end justify-center fixed mb-2"}>
-                    <SuccessPop setSuccessPop={setSuccessPop} message={successMessage}/>
-                </div>}
             <div className={`flex flex-col items-center`}>
                 <form method={"post"} onSubmit={handleSubmit}
                       className={"py-2 flex flex-col items-center border rounded-md"}>
                     <label className={"px-2 text-amber-700"} htmlFor={"roommate"}>Add a new roommate</label>
                     <input
-                        type={"text"}
+                        type={"email"}
                         name={"new_roommate"}
                         id={"roommate"}
                         value={newRoommate}

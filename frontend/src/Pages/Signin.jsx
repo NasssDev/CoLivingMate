@@ -58,6 +58,7 @@ export const Signin = ({ setIsLogged }) => {
             <div onClick={closePopup} className={"inset-0 flex items-end justify-center fixed mb-2 "}>
                 <ErrorPop setErrorPop={setErrorPop} message={errorMessage}/>
             </div>}
+
         <div className="h-full min-h-screen bg-white">
             <h1 className="text-3xl text-indigo-500">Signin</h1>
             <div className="flex flex-col justify-center items-center">

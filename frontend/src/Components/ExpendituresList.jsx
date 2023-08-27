@@ -1,13 +1,47 @@
-export const ExpendituresList = ({ roommates, listClassName }) => {
+import {Trash2} from "lucide-react";
+import {useContext} from "react";
+import {MessageStateContext, MyFlatsharesDetailsContext} from "../Utils/Context.jsx";
+
+export const ExpendituresList = ({roommates, listClassName, currentUser}) => {
+
+    const {setSuccessMessage, setSuccessPop, setErrorMessage, setErrorPop} = useContext(MessageStateContext);
+    const {setInfosModified} = useContext(MyFlatsharesDetailsContext);
+
+    const handleDelete = (expenditureId) => {
+        fetch(`http://localhost:1200/delete_expenditure?expenditure_id=${expenditureId}}`)
+            .then(res => res.json())
+            .then(data => {
+                    if (data.status !== 200) {
+                        setErrorMessage(data.message);
+                        setErrorPop(true);
+                        return;
+                    }
+                    setSuccessMessage(data.message);
+                    setSuccessPop(true);
+                    setInfosModified(current => !current);
+                }
+            )
+    }
     return (
-        <ul className={`${listClassName} w-fit p-2 rounded-md mx-auto lg:w-fit md:w-fit sm:w-fit mt-2`}>
+        <ul className={`${listClassName} w-full p-2 rounded-md mx-auto lg:w-3/4  mt-2`}>
             {roommates?.map((roommate) => {
                 return roommate?.expenditures !== null && <li
-                    className={` font-semibold p-1 border-b border-b-gray-500 text-center last:border-b-0`}
+                    className={` font-semibold py-2 px-4 my-4 mx-2 border border-indigo-500 bg-indigo-50 rounded-lg`}
                     key={roommate.roommate_id}>{roommate?.roommate_firstname + " " + roommate?.roommate_lastname + " : "}
                     {roommate?.expenditures.map(expenditure => {
-                        return <p key={expenditure.expenditure_id}
-                            className={`font-normal text-sm text-gray-700`}>{expenditure.expenditure_name + " : " + expenditure.expenditure_amount + " €"}</p>
+                        return <form key={expenditure.expenditure_id}
+                                     className={`font-normal text-sm text-indigo-700 py-1`}>
+                            <span key={expenditure.expenditure_id}
+                                  className={`font-normal text-sm text-indigo-700`}>{expenditure.expenditure_name + " : " + expenditure.expenditure_amount + " €"}</span>
+                            {
+                                currentUser?.roommate_role === 1 &&
+                                <button type={"button"} onClick={() => {
+                                    handleDelete(expenditure.expenditure_id);
+                                }} className={"float-right p-0.5 text-red-500 hover:text-white rounded-md hover:bg-red-500"}>
+                                    <Trash2 size={20} className={""}/>
+                                </button>
+                            }
+                        </form>
                     })}
                 </li>
             })}

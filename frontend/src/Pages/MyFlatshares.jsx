@@ -36,17 +36,19 @@ export const MyFlatshares = () => {
                     </span>
                 </div>
             </div>
-            <div className="flex flex-col flex-wrap gap-4 items-center">
-                {myFlatshares.length !== 0 ? myFlatshares.map(flatshare => {
+            {myFlatshares.length !== 0 ?
+                <div className="flex flex-col flex-wrap gap-4 items-center">
+                    {myFlatshares.map(flatshare => {
                         return <MyFlatsharesCard key={flatshare.id} flatshare={flatshare}/>
                     })
-                    :
-                    <div className="flex flex-col items-center justify-center">
-                        <h1 className="text-3xl text-gray-600">You are not in any flatshare !</h1>
-                        <a href="/myflatsharedetails/create" className="text-indigo-500 underline">Create one</a>
-                    </div>
-                }
-            </div>
+                    }
+                </div>
+                :
+                <div className="h-80 flex items-center">
+
+                    <h1 className="m-auto text-xl md:text-3xl text-gray-600">You are not in any flatshare !</h1>
+                </div>
+            }
         </div>
     )
 }

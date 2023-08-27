@@ -45,15 +45,15 @@ export const Navbar = ({isLogged, setIsLogged}) => {
                         className={`absolute inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white shadow md:mt-0 md:p-0 md:top-0 md:relative md:opacity-100 md:translate-x-0 md:flex md:items-center md:justify-between md:shadow-none ${isOpen ? 'translate-x-0 opacity-100' : 'opacity-0 -translate-x-full'}`}>
                         <div className="flex flex-col px-2 -mx-4 md:flex-row md:mx-10 md:py-0">
                             <Link to="/"
-                                  className={`${location.pathname === "/" && "font-bold text-lg text-amber-600 drop-shadow-lg hover:font-bold"} px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg hover:font-semibold hover:text-amber-600 md:mx-2`}>
+                                  className={`${location.pathname === "/" ? "font-bold text-lg text-amber-600 drop-shadow-lg hover:font-bold" : "text-gray-700 hover:font-semibold"} px-2.5 py-2  transition-colors duration-300 transform rounded-lg  hover:text-amber-600 md:mx-2`}>
                                 Home
                             </Link>
                             <Link to="/myflatshares"
-                                  className={`${location.pathname.includes("/myflatshare") && "font-bold text-lg text-amber-600 drop-shadow-lg hover:font-bold"} px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg hover:font-semibold hover:text-amber-600 md:mx-2`}>
+                                  className={`${location.pathname.includes("/myflatshare") ? "font-bold text-lg text-amber-600 drop-shadow-lg hover:font-bold" : "text-gray-700 hover:font-semibold"} px-2.5 py-2  transition-colors duration-300 transform rounded-lg  hover:text-amber-600 md:mx-2`}>
                                 My Flat shares
                             </Link>
                             <Link to="/profile"
-                                  className={`${location.pathname === "/profile" && "font-bold text-lg text-amber-600 drop-shadow-lg hover:font-bold"} px-2.5 py-2 text-gray-700 transition-colors duration-150 transform rounded-lg hover:font-semibold hover:text-amber-600 md:mx-2`}>
+                                  className={`${location.pathname === "/profile" ? "font-bold text-lg text-amber-600 drop-shadow-lg hover:font-bold" : "text-gray-700 hover:font-semibold" } px-2.5 py-2 transition-colors duration-150 transform rounded-lg  hover:text-amber-600 md:mx-2`}>
                                 Profile
                             </Link>
                         </div>
@@ -82,7 +82,7 @@ export const Navbar = ({isLogged, setIsLogged}) => {
                                         <line x1="12" x2="12" y1="2" y2="12"/>
                                     </svg>
                                     <span
-                                        className="group-hover:opacity-100 transition-opacity bg-gray-100 px-1 text-sm text-indigo-700 rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full opacity-0 m-4 mx-auto">
+                                        className="group-hover:opacity-100 transition-opacity bg-gray-100 px-1 text-sm text-red-700 rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full opacity-0 m-4 mx-auto">
                                         Logout
                                     </span>
                                 </div>

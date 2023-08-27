@@ -24,4 +24,15 @@ export const MessageStateProvider = ({children}) => {
     )
 }
 
+export const MyFlatsharesDetailsContext = createContext(null);
 
+export const MyFlatsharesDetailsProvider = ({children}) => {
+
+        const [infosModified, setInfosModified] = useState(false);
+
+        return (
+            <MyFlatsharesDetailsContext.Provider value={{infosModified, setInfosModified}}>
+                {children}
+            </MyFlatsharesDetailsContext.Provider>
+        )
+}

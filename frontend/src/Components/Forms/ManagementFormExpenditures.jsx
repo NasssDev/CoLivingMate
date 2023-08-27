@@ -1,38 +1,87 @@
-export const ManagementFormExpenditures = ({roommates, setRoommates, setSuccessPop}) => {
+import {Trash2} from "lucide-react";
+import {useContext, useState} from "react";
+import {MessageStateContext, MyFlatsharesDetailsContext} from "../../Utils/Context.jsx";
 
-            const [monthlyFee, setMonthlyFee] = useState([]);
+export const ManagementFormExpenditures = ({roommates, id_flatshare}) => {
 
-            const [expenditure, setExpenditure] = useState([]);
+    const {
+        setSuccessPop,
+        setErrorPop,
+        setErrorMessage,
+        setSuccessMessage
+    } = useContext(MessageStateContext);
 
-            const [newFee, setNewFee] = useState({
-                id: null,
-                id_roommate: null,
-                amount: null,
-                date: null
-            });
+    const {setInfosModified} = useContext(MyFlatsharesDetailsContext);
 
-            const [newExpenditure, setNewExpenditure] = useState({
-                id: null,
-                id_roommate: null,
-                amount: null,
-                date: null
-            });
+    const [newExpenditure, setNewExpenditure] = useState({
+        expenditure_name: "",
+        expenditure_amount: "",
+    });
 
-            const [newRoommate, setNewRoommate] = useState({
-                id: null,
-                firstname: null,
-                lastname: null,
-                email: null,
-                phone: null,
-                id_flatshare: null,
-                monthly_fees: null,
-                expenditures: null
-            });
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        fetch(`http://localhost:1200/create_expenditure?id_flatshare=${id_flatshare}&id_creator=${sessionStorage.userId}&expenditure_name=${newExpenditure.expenditure_name}&amount=${newExpenditure.expenditure_amount}`)
+            .then(res => res.json())
+            .then(data => {
+                    if (data.status !== 200) {
+                        setErrorMessage(data.message);
+                        setErrorPop(true);
+                        return;
+                    }
+                    setNewExpenditure({
+                        expenditure_name: "",
+                        expenditure_amount: "",
+                    })
+                    setSuccessMessage(data.message);
+                    setSuccessPop(true);
+                    setInfosModified(current => !current);
+                }
+            )
+    }
 
-            const [newRoommateFee, setNewRoommateFee] = useState({
-                id: null,
-                id_roommate: null,
-                amount: null,
-                date: null
-            });
+    const handleChange = (e) => {
+        setNewExpenditure(current => ({
+            ...current,
+            [e.target.name]: e.target.value
+        }))
+    }
+
+    return (
+        <div className={`flex flex-col items-center px-2`}>
+            <form method={"post"} onSubmit={handleSubmit}
+                  className={"py-2 flex flex-col items-center border rounded-md"}>
+                <h1 className={"px-2 text-indigo-700"}>Create a new Expenditure</h1>
+                <div className={"px-1 flex flex-row items-center"}>
+                    <div className={"px-1"}>
+                        <input
+                            required
+                            type={"text"}
+                            name={"expenditure_name"}
+                            id={"expenditurename"}
+                            value={newExpenditure.expenditure_name}
+                            placeholder={"Name"}
+                            onChange={handleChange}
+                            className={`w-full border border-gray-300 rounded-lg p-2 my-2 focus:outline-none focus:ring focus:ring-indigo-400 focus:ring-opacity-40 focus:border-indigo-500`}
+                        />
+                    </div>
+                    <div className={"px-1"}>
+                        <input
+                            required
+                            type={"number"}
+                            min={1}
+                            name={"expenditure_amount"}
+                            id={"expenditureamount"}
+                            value={newExpenditure.expenditure_amount}
+                            placeholder={"Amount"}
+                            onChange={handleChange}
+                            className={`w-full border border-gray-300 rounded-lg p-2 my-2 focus:outline-none focus:ring focus:ring-indigo-400 focus:ring-opacity-40 focus:border-indigo-500`}
+                        />
+                    </div>
+                </div>
+                <button type={"submit"}
+                        className={"px-3 py-1 bg-indigo-600 text-white rounded-md hover:bg-indigo-500"}>Create
+                </button>
+            </form>
+        </div>
+    )
 }

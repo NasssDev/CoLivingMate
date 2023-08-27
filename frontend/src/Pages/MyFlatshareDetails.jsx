@@ -1,11 +1,28 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {RoommatesList} from "../Components/RoommatesList.jsx";
-import {FeesList} from "../Components/FeesList.jsx";
 import {ExpendituresList} from "../Components/ExpendituresList.jsx";
-import {Link, useParams} from "react-router-dom";
-import {ModifyExpenses} from "../Components/ModifyExpenses.jsx";
+import {useParams} from "react-router-dom";
+import {ManagementFormRoommates} from "../Components/Forms/ManagementFormRoommates.jsx";
+import {ManagementFormFees} from "../Components/Forms/ManagementFormFees.jsx";
+import {FormFeesList} from "../Components/Forms/FormFeesList.jsx";
+import {MessageStateContext, MyFlatsharesDetailsContext} from "../Utils/Context.jsx";
+import {ErrorPop} from "../Components/Popup/ErrorPop.jsx";
+import {SuccessPop} from "../Components/Popup/SuccessPop.jsx";
+import {ManagementFormExpenditures} from "../Components/Forms/ManagementFormExpenditures.jsx";
 
 export const MyFlatshareDetails = () => {
+
+    const {infosModified} = useContext(MyFlatsharesDetailsContext);
+
+    const {
+        closePopup,
+        successPop,
+        setSuccessPop,
+        errorPop,
+        setErrorPop,
+        errorMessage,
+        successMessage
+    } = useContext(MessageStateContext);
 
     const {id_flatshare} = useParams();
 
@@ -16,6 +33,8 @@ export const MyFlatshareDetails = () => {
     const [roommateNumber, setRoommateNumber] = useState(0);
 
     const [roommates, setRoommates] = useState([]);
+
+    const [currentUser, setCurrentUser] = useState({});
 
     const images = [
         `https://source.unsplash.com/600x300/?house,${myFlatshare?.flat_share_name}`,
@@ -39,7 +58,11 @@ export const MyFlatshareDetails = () => {
                     setRoommates(roommatesArray);
                 }
             )
-    }, []);
+    }, [infosModified]);
+
+    useEffect(() => {
+        setCurrentUser(roommates.find((roommate) => roommate.roommate_id === Number(sessionStorage.userId) && roommate.roommate_role === 1));
+    }, [roommates]);
 
 
     return (
@@ -83,58 +106,70 @@ export const MyFlatshareDetails = () => {
                 <div className="py-4">
                     <div className="flex flex-row flex-wrap">
                         <div className="h-full w-full flex flex-col relative">
-                            <div className="absolute right-0 ">
-                                <Link to={"modifyexpenses"}>
-                                    <div className={"group flex relative"}>
-                                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
-                                             stroke="currentColor"
-                                             strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                                             className="text-gray-600 hover:text-indigo-500 hover:cursor-pointer">
-                                            <line x1="21" x2="14" y1="4" y2="4"/>
-                                            <line x1="10" x2="3" y1="4" y2="4"/>
-                                            <line x1="21" x2="12" y1="12" y2="12"/>
-                                            <line x1="8" x2="3" y1="12" y2="12"/>
-                                            <line x1="21" x2="16" y1="20" y2="20"/>
-                                            <line x1="12" x2="3" y1="20" y2="20"/>
-                                            <line x1="14" x2="14" y1="2" y2="6"/>
-                                            <line x1="8" x2="8" y1="10" y2="14"/>
-                                            <line x1="16" x2="16" y1="18" y2="22"/>
-                                        </svg>
-                                        <span
-                                            className="group-hover:opacity-100 transition-opacity bg-gray-100 px-1 text-sm text-indigo-700 rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full opacity-0 m-3 mx-auto">
-                                        Modify
-                                    </span>
-                                    </div>
-                                </Link>
-                            </div>
                             <div className={`grid sm:grid-cols-3 `}>
                                 <div className={`flex flex-col items-center`}>
-                                    <h1 className="font-semibold text-lg text-indigo-800 tracking-wide">Roommates list
+                                    <h1 className="font-semibold text-lg text-indigo-800 tracking-wide">Roommates
+                                        list
                                     </h1>
-                                    <RoommatesList ListClassName={''} id_flatshare={id_flatshare} roommates={roommates}/>
+                                    <RoommatesList ListClassName={''} id_flatshare={id_flatshare}
+                                                   currentUser={currentUser} setMyFlatshare={setMyFlatshare}
+                                                   roommates={roommates}/>
+                                    {
+                                        currentUser !== null
+                                        && currentUser?.roommate_role === 1
+                                        && <ManagementFormRoommates/>
+                                    }
                                 </div>
                                 <hr className="sm:hidden my-6 border-2 border-gray-300 rounded-r-lg rounded-l-lg"/>
                                 <div className={`flex flex-col sm:border-l-2 sm:border-l-gray-300 items-center`}>
                                     <h1 className="font-semibold text-lg text-indigo-800 tracking-wide">Monthly fees
                                     </h1>
-                                    {roommates.some((roommate) => roommate.monthly_fees !== null) ?
-                                        <FeesList ListClassName={'text-center'} roommates={roommates}/> :
-                                        <p className="m-auto text-xl text-gray-500">No fees yet !</p>}
+                                    {
+                                        roommates.some((roommate) => roommate.monthly_fees !== null)
+                                        && currentUser !== null
+                                        && <FormFeesList currentUser={currentUser} roommates={roommates}/>
+                                    }
+                                    {
+                                        roommates.some((roommate) => roommate.monthly_fees === null)
+                                        && <p className="m-auto text-xl text-gray-500">No fees yet !</p>
+                                    }
+                                    {
+                                        currentUser !== null
+                                        && currentUser?.roommate_role === 1
+                                        && <ManagementFormFees id_flatshare={id_flatshare}/>
+                                    }
+
                                 </div>
                                 <hr className="sm:hidden my-6 border-2 border-gray-300 rounded-r-lg rounded-l-lg"/>
                                 <div className={`flex flex-col sm:border-l-2 sm:border-l-gray-300 items-center`}>
                                     <h1 className="font-semibold text-lg text-indigo-800 tracking-wide">Expenditures
                                     </h1>
                                     {roommates.some((roommate) => roommate.expenditures !== null) ?
-                                        <ExpendituresList ListClassName={'text-center'} roommates={roommates}/> :
+                                        <ExpendituresList  currentUser={currentUser} ListClassName={'text-center'} roommates={roommates}/> :
                                         <p className="m-auto text-xl text-gray-500">No expenditures yet !</p>}
+                                    {
+                                        currentUser !== null
+                                        && currentUser?.roommate_role === 1
+                                        && <ManagementFormExpenditures id_flatshare={id_flatshare} roommates={roommates}/>
+                                    }
                                 </div>
                             </div>
-                            <ModifyExpenses roommates={roommates} />
                         </div>
                     </div>
                 </div>
             </div>
+            {
+                !!errorPop &&
+                <div onClick={closePopup} className={"inset-0 flex items-end justify-center fixed mb-2 "}>
+                    <ErrorPop setErrorPop={setErrorPop} message={errorMessage}/>
+                </div>
+            }
+            {
+                !!successPop &&
+                <div onClick={closePopup} className={"inset-0 flex items-end justify-center fixed mb-2"}>
+                    <SuccessPop setSuccessPop={setSuccessPop} message={successMessage}/>
+                </div>
+            }
         </div>
     )
 }

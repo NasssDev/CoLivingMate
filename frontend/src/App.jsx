@@ -11,8 +11,7 @@ import {MyFlatshareDetails} from "./Pages/MyFlatshareDetails.jsx";
 import {Profile} from "./Pages/Profile.jsx";
 import {Footer} from "./Components/Footer.jsx";
 import {CreateFlatshare} from "./Pages/CreateFlatshare.jsx";
-import {ModifyExpenses} from "./Components/ModifyExpenses.jsx";
-import {MessageStateProvider} from "./Utils/Context.jsx";
+import {MessageStateProvider, MyFlatsharesDetailsProvider} from "./Utils/Context.jsx";
 
 function App() {
 
@@ -55,15 +54,11 @@ function App() {
 
                             <Route path="/myflatsharedetails/:id_flatshare" element={
                                 <AuthRequired>
-                                    <MyFlatshareDetails flatshares={flatshares}/>
+                                    <MyFlatsharesDetailsProvider>
+                                        <MyFlatshareDetails flatshares={flatshares}/>
+                                    </MyFlatsharesDetailsProvider>
                                 </AuthRequired>
                             }>
-
-                                <Route path="modifyexpenses" element={
-                                    <AuthRequired>
-                                        <ModifyExpenses/>
-                                    </AuthRequired>
-                                }/>
                             </Route>
 
 
