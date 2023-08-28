@@ -75,7 +75,7 @@ export const RoommatesList = (
             {!!popupConfirmDelete &&
                 <ModalMessage
                     message={"Are you sure that you want to kick this roommate ?"} buttonName={"Confirm"}
-                        setPopupConfirmDelete={setPopupConfirmDelete} handleAction={handleConfirm}/>
+                    setPopupConfirm={setPopupConfirmDelete} handleAction={handleConfirm}/>
             }
         </>
     )

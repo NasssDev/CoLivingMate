@@ -82,7 +82,7 @@ export const Navbar = ({isLogged, setIsLogged}) => {
                                         <line x1="12" x2="12" y1="2" y2="12"/>
                                     </svg>
                                     <span
-                                        className="group-hover:opacity-100 transition-opacity bg-gray-100 px-1 text-sm text-red-700 rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full opacity-0 m-4 mx-auto">
+                                        className="group-hover:block bg-gray-100 px-1 text-sm text-red-700 rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full hidden m-4 mx-auto hover:hidden">
                                         Logout
                                     </span>
                                 </div>

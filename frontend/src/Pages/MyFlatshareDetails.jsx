@@ -1,34 +1,32 @@
 import React, {useContext, useEffect, useState} from "react";
 import {RoommatesList} from "../Components/RoommatesList.jsx";
 import {ExpendituresList} from "../Components/ExpendituresList.jsx";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {ManagementFormRoommates} from "../Components/Forms/ManagementFormRoommates.jsx";
 import {ManagementFormFees} from "../Components/Forms/ManagementFormFees.jsx";
 import {FormFeesList} from "../Components/Forms/FormFeesList.jsx";
 import {MessageStateContext, MyFlatsharesDetailsContext} from "../Utils/Context.jsx";
-import {ErrorPop} from "../Components/Popup/ErrorPop.jsx";
-import {SuccessPop} from "../Components/Popup/SuccessPop.jsx";
 import {ManagementFormExpenditures} from "../Components/Forms/ManagementFormExpenditures.jsx";
+import { DoorOpen } from 'lucide-react';
+import {ModalMessage} from "../Components/ModalMessage.jsx";
+
 
 export const MyFlatshareDetails = () => {
 
     const {infosModified} = useContext(MyFlatsharesDetailsContext);
 
     const {
-        closePopup,
-        successPop,
         setSuccessPop,
-        errorPop,
         setErrorPop,
-        errorMessage,
-        successMessage
+        setErrorMessage,
+        setSuccessMessage,
     } = useContext(MessageStateContext);
+
+    const navigate = useNavigate();
 
     const {id_flatshare} = useParams();
 
     const [myFlatshare, setMyFlatshare] = useState([]);
-
-    const [selectedImage, setSelectedImage] = useState(`https://source.unsplash.com/600x300/?house,${myFlatshare?.flat_share_name || "house"}`);
 
     const [roommateNumber, setRoommateNumber] = useState(0);
 
@@ -36,13 +34,17 @@ export const MyFlatshareDetails = () => {
 
     const [currentUser, setCurrentUser] = useState({});
 
-    const images = [
-        `https://source.unsplash.com/600x300/?house,${myFlatshare?.flat_share_name}`,
+    const [images] = useState([
+        `https://source.unsplash.com/600x300/?house,${myFlatshare?.flat_share_name || "house"}`,
         `https://source.unsplash.com/600x300/?bedroom,${myFlatshare?.flat_share_name}`,
         `https://source.unsplash.com/600x300/?big kitchen,${myFlatshare?.flat_share_name}`,
         `https://source.unsplash.com/600x300/?full living room,${myFlatshare?.flat_share_name}`,
         `https://source.unsplash.com/600x300/?luxury bathroom,${myFlatshare?.flat_share_name}`
-    ];
+    ]);
+
+    const [selectedImage, setSelectedImage] = useState(images[0]);
+
+    const [popupConfirmLeave, setPopupConfirmLeave] = useState(false);
 
     const handleImageClick = (image) => {
         setSelectedImage(image);
@@ -61,13 +63,38 @@ export const MyFlatshareDetails = () => {
     }, [infosModified]);
 
     useEffect(() => {
-        setCurrentUser(roommates.find((roommate) => roommate.roommate_id === Number(sessionStorage.userId) && roommate.roommate_role === 1));
+        setCurrentUser(roommates.find((roommate) => roommate.roommate_id === Number(sessionStorage.userId)));
     }, [roommates]);
 
+    const handleLeaveFlatshare = () => {
+        fetch(`http://localhost:1200/kick_roommate?id_flatshare=${id_flatshare}&email_roommate=${currentUser.roommate_email}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.status !== 200) {
+                    setErrorPop(true);
+                    setErrorMessage(data.data[0]);
+                    return;
+                }
+                setSuccessPop(true);
+                setSuccessMessage(`You successfully left the flatshare : ${myFlatshare.flat_share_name} !`);
+                navigate('/myflatshares');
+            })
+    }
+
+    const handleConfirmLeave = () => {
+        setPopupConfirmLeave(false);
+        handleLeaveFlatshare();
+    }
 
     return (
         <div className="h-full min-h-screen bg-white">
-            <h1 className="text-3xl text-indigo-500">My Flat Share Details</h1>
+            <div className={"relative"}>
+                <h1 className="text-3xl text-indigo-500">My Flat Share Details</h1>
+                <span onClick={() => setPopupConfirmLeave(true)}
+                    className={"py-2 px-1 absolute right-0 top-0 sm:top-1.5 sm:py-0 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white hover:cursor-pointer rounded-lg "}>
+                    <span className={"hidden sm:block float-left"}>Leave</span><DoorOpen className={"float-right"} />
+                </span>
+            </div>
             <div className="mt-4">
                 <h1 className="font-semibold text-xl tracking-wide">{myFlatshare?.flat_share_name}</h1>
                 <div className="flex flex-col md:flex-row items-end mt-4">
@@ -145,12 +172,14 @@ export const MyFlatshareDetails = () => {
                                     <h1 className="font-semibold text-lg text-indigo-800 tracking-wide">Expenditures
                                     </h1>
                                     {roommates.some((roommate) => roommate.expenditures !== null) ?
-                                        <ExpendituresList  currentUser={currentUser} ListClassName={'text-center'} roommates={roommates}/> :
+                                        <ExpendituresList currentUser={currentUser} ListClassName={'text-center'}
+                                                          roommates={roommates}/> :
                                         <p className="m-auto text-xl text-gray-500">No expenditures yet !</p>}
                                     {
                                         currentUser !== null
                                         && currentUser?.roommate_role === 1
-                                        && <ManagementFormExpenditures id_flatshare={id_flatshare} roommates={roommates}/>
+                                        &&
+                                        <ManagementFormExpenditures id_flatshare={id_flatshare} roommates={roommates}/>
                                     }
                                 </div>
                             </div>
@@ -158,17 +187,10 @@ export const MyFlatshareDetails = () => {
                     </div>
                 </div>
             </div>
-            {
-                !!errorPop &&
-                <div onClick={closePopup} className={"inset-0 flex items-end justify-center fixed mb-2 "}>
-                    <ErrorPop setErrorPop={setErrorPop} message={errorMessage}/>
-                </div>
-            }
-            {
-                !!successPop &&
-                <div onClick={closePopup} className={"inset-0 flex items-end justify-center fixed mb-2"}>
-                    <SuccessPop setSuccessPop={setSuccessPop} message={successMessage}/>
-                </div>
+            {!!popupConfirmLeave &&
+                <ModalMessage
+                    message={"Are you sure that you want to leave the flat share ?"} buttonName={"Leave"}
+                    setPopupConfirm={setPopupConfirmLeave} handleAction={handleConfirmLeave}/>
             }
         </div>
     )

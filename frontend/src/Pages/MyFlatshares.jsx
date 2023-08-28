@@ -31,7 +31,7 @@ export const MyFlatshares = () => {
                         </svg>
                     </Link>
                     <span
-                        className="group-hover:opacity-100 transition-opacity bg-gray-100 px-1 text-sm text-amber-700 rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full opacity-0 -mt-1 mx-auto">
+                        className="group-hover:block transition-opacity bg-gray-100 px-1 text-sm text-amber-700 rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full hidden -mt-1 mx-auto hover:hidden">
                         Create flatshare
                     </span>
                 </div>
@@ -46,7 +46,7 @@ export const MyFlatshares = () => {
                 :
                 <div className="h-80 flex items-center">
 
-                    <h1 className="m-auto text-xl md:text-3xl text-gray-600">You are not in any flatshare !</h1>
+                    <h1 className="m-auto text-xl md:text-3xl text-gray-600 text-center">You are not in any flatshare ! <br/><Link className={"text-amber-500 underline hover:text-amber-400"} to={"/myflatshares/create"}>Create one</Link> <strong>or</strong> <Link className={"text-amber-500 underline hover:text-amber-400"} to={"/"}>Join one</Link> 😁</h1>
                 </div>
             }
         </div>
