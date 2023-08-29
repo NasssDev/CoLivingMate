@@ -1,12 +1,10 @@
 import {useContext, useState} from "react";
 import {MessageStateContext, MyFlatsharesDetailsContext} from "../../Utils/Context.jsx";
 
-export const ManagementFormFees = ({roommates, setRoommates, id_flatshare}) => {
+export const ManagementFormFees = ({ id_flatshare}) => {
 
     const {
         setSuccessPop,
-        setErrorPop,
-        setErrorMessage,
         setSuccessMessage
     } = useContext(MessageStateContext);
 

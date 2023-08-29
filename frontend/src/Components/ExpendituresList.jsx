@@ -26,13 +26,13 @@ export const ExpendituresList = ({roommates, listClassName, currentUser}) => {
         <ul className={`${listClassName} w-full p-2 rounded-md mx-auto lg:w-3/4  mt-2`}>
             {roommates?.map((roommate) => {
                 return roommate?.expenditures !== null && <li
-                    className={` font-semibold py-2 px-4 my-4 mx-2 border border-indigo-500 bg-indigo-50 rounded-lg`}
+                    className={` font-semibold py-2 px-4 my-4 mx-2 border border-sky-500 bg-sky-50 rounded-lg`}
                     key={roommate.roommate_id}>{roommate?.roommate_firstname + " " + roommate?.roommate_lastname + " : "}
                     {roommate?.expenditures.map(expenditure => {
                         return <form key={expenditure.expenditure_id}
-                                     className={`font-normal text-sm text-indigo-700 py-1`}>
+                                     className={`font-normal text-sm text-sky-700 py-1`}>
                             <span key={expenditure.expenditure_id}
-                                  className={`font-normal text-sm text-indigo-700`}>{expenditure.expenditure_name + " : " + expenditure.expenditure_amount + " €"}</span>
+                                  className={`font-normal text-sm text-sky-700`}>{expenditure.expenditure_name + " : " + expenditure.expenditure_amount + " €"}</span>
                             {
                                 currentUser?.roommate_role === 1 &&
                                 <button type={"button"} onClick={() => {

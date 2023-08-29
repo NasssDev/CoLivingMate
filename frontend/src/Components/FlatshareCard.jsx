@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 export const FlatshareCard = ({flatshare}) => {
 
     return (
-        <div className="bg-indigo-50 rounded-lg shadow-lg my-4 w-full max-w-sm">
+        <div className="bg-white rounded-lg shadow-lg my-4 w-full max-w-sm">
             <Link to={`/flatshare/${flatshare.id}`}>
                 <img src={`https://source.unsplash.com/400x200/?house,${flatshare.name}`} alt="house"
                      className=" rounded-t-lg"/>

@@ -3,11 +3,10 @@ import {ButtonForm} from "../Components/ButtonForm.jsx";
 import {InputForm} from "../Components/InputForm.jsx";
 import {Link} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
-import {ErrorPop} from "../Components/Popup/ErrorPop.jsx";
 import {MessageStateContext} from "../Utils/Context.jsx";
 export const Signin = ({ setIsLogged }) => {
 
-    const {errorPop, setErrorPop, errorMessage,setErrorMessage} = useContext(MessageStateContext);
+    const { setErrorPop,setErrorMessage} = useContext(MessageStateContext);
 
     const [formData, setFormData] = useState({username: "", pwd: ""});
 
@@ -49,18 +48,9 @@ export const Signin = ({ setIsLogged }) => {
         setFormData(current => ({...current, [e.target.name]: e.target.value}));
     }
 
-    const closePopup = () => {
-        setErrorPop(false);
-    }
-
     return (<>
-        {!!errorPop &&
-            <div onClick={closePopup} className={"inset-0 flex items-end justify-center fixed mb-2 "}>
-                <ErrorPop setErrorPop={setErrorPop} message={errorMessage}/>
-            </div>}
-
         <div className="h-full min-h-screen bg-white">
-            <h1 className="text-3xl text-indigo-500">Signin</h1>
+            <h1 className="text-3xl text-indigo-500 pb-5">Signin</h1>
             <div className="flex flex-col justify-center items-center">
                 <h3 className="text-xl font-semibold text-indigo-800">Happy to see you, welcome !</h3>
                 <form method={"post"} onSubmit={handleSubmit} className={` w-64 py-6`}>

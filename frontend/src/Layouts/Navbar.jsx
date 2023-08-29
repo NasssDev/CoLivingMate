@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Link, useLocation} from "react-router-dom";
+import { Power } from 'lucide-react';
 
 export const Navbar = ({isLogged, setIsLogged}) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -74,13 +75,7 @@ export const Navbar = ({isLogged, setIsLogged}) => {
                                     placeholder="Search"
                                 />
                                 <div className="group flex relative w-fit">
-                                    <svg width="28" height="28" viewBox="0 0 24 24" onClick={handleLogout}
-                                         fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                                         strokeLinejoin="round"
-                                         className="hover:text-red-600 hover:cursor-pointer ">
-                                        <path d="M18.36 6.64a9 9 0 1 1-12.73 0"/>
-                                        <line x1="12" x2="12" y1="2" y2="12"/>
-                                    </svg>
+                                    <Power className="hover:text-red-600 hover:cursor-pointer " size={28} onClick={handleLogout}/>
                                     <span
                                         className="group-hover:block bg-gray-100 px-1 text-sm text-red-700 rounded-md absolute left-1/2 -translate-x-1/2 translate-y-full hidden m-4 mx-auto hover:hidden">
                                         Logout

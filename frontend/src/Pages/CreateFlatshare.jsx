@@ -1,13 +1,14 @@
 import {useContext, useState} from "react";
-import {ErrorPop} from "../Components/Popup/ErrorPop.jsx";
-import {SuccessPop} from "../Components/Popup/SuccessPop.jsx";
 import {InputForm} from "../Components/InputForm.jsx";
 import {ButtonForm} from "../Components/ButtonForm.jsx";
 import {MessageStateContext} from "../Utils/Context.jsx";
+import {useNavigate} from "react-router-dom";
 
 export const CreateFlatshare = () => {
 
-    const {successPop, setSuccessPop, errorPop, setErrorPop, errorMessage,setErrorMessage,setSuccessMessage,successMessage} = useContext(MessageStateContext)
+    const { setSuccessPop, setErrorPop, setErrorMessage,setSuccessMessage} = useContext(MessageStateContext)
+
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         name: "",
@@ -34,12 +35,13 @@ export const CreateFlatshare = () => {
             .then(res => res.json())
             .then(data => {
                     if (data.status !== 200) {
-                        setErrorMessage(data.data[0]);
+                        setErrorMessage(data.message);
                         setErrorPop(true);
                         return;
                     }
                     setSuccessMessage("Your flatshare has been successfully created, you can now invite people !");
                     setSuccessPop(true);
+                    navigate(`myflatsharedetails/${data.data.id}`);
                 }
             )
     }
@@ -59,37 +61,28 @@ export const CreateFlatshare = () => {
                 <form onSubmit={handleSubmit} className={` w-64 py-6`}>
                     <label htmlFor="name">Name</label>
                     <InputForm inputType="text" inputPlaceholder="The Best Coliving" inputName="name"
-                               inputId="name"
+                              inputRequired={true} inputId="name"
                                inputOnChange={handleChange} inputValue={formData.name}/>
                     <label htmlFor="address">Address</label>
                     <InputForm inputType="text" inputPlaceholder="6 rue de la liberté" inputName="address"
-                               inputId="address"
+                               inputRequired={true} inputId="address"
                                inputOnChange={handleChange} inputValue={formData.address}/>
                     <label htmlFor="city">City</label>
                     <InputForm inputType="text" inputPlaceholder="Niort" inputName="city" inputId="city"
-                               inputOnChange={handleChange} inputValue={formData.city}/>
+                               inputRequired={true} inputOnChange={handleChange} inputValue={formData.city}/>
                     <label htmlFor="zip_code">Zip Code</label>
                     <InputForm inputType="text" inputPlaceholder={"79000"} inputName="zip_code"
-                               inputId="zip_code"
+                               inputRequired={true} inputId="zip_code"
                                inputOnChange={handleChange} inputValue={formData.zip_code}/>
                     <label htmlFor="start_date">Start Date</label>
                     <InputForm inputType="date" inputName="start_date" inputId="start_date"
-                               inputOnChange={handleChange} inputValue={formData.start_date}/>
+                               inputRequired={true} inputOnChange={handleChange} inputValue={formData.start_date}/>
                     <label htmlFor="end_date">End Date (optional)</label>
                     <InputForm inputType="date" inputPlaceholder="" inputName="end_date" inputId="end_date"
-                               inputOnChange={handleChange} inputValue={formData.end_date}/>
+                               inputRequired={true} inputOnChange={handleChange} inputValue={formData.end_date}/>
                     <ButtonForm buttonName={"Create"}></ButtonForm>
                 </form>
             </div>
-            {!!errorPop &&
-                <div onClick={closePopup} className={"inset-0 flex items-end justify-center fixed mb-2 "}>
-                    <ErrorPop setErrorPop={setErrorPop} message={errorMessage}/>
-                </div>}
-            {!!successPop &&
-                <div onClick={closePopup} className={"inset-0 flex items-end justify-center fixed mb-2"}>
-                    <SuccessPop setSuccessPop={setSuccessPop} message={successMessage}/>
-                </div>}
-
         </>
     )
 }

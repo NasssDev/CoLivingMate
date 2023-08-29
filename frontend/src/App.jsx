@@ -11,7 +11,7 @@ import {MyFlatshareDetails} from "./Pages/MyFlatshareDetails.jsx";
 import {Profile} from "./Pages/Profile.jsx";
 import {Footer} from "./Components/Footer.jsx";
 import {CreateFlatshare} from "./Pages/CreateFlatshare.jsx";
-import {MessageStateContext, MessageStateProvider, MyFlatsharesDetailsProvider} from "./Utils/Context.jsx";
+import {MessageStateContext, MyFlatsharesDetailsProvider} from "./Utils/Context.jsx";
 import {ErrorPop} from "./Components/Popup/ErrorPop.jsx";
 import {SuccessPop} from "./Components/Popup/SuccessPop.jsx";
 
@@ -53,7 +53,7 @@ function App() {
                         }/>
                         <Route path="/flatshare/:id_flatshare" element={
                             <AuthRequired>
-                                <FlatshareDetails flatshares={flatshares}/>
+                                <FlatshareDetails />
                             </AuthRequired>
                         }/>
                         <Route path="/myflatshares" element={
@@ -104,13 +104,13 @@ function App() {
             <Footer/>
             {
                 !!errorPop &&
-                <div onClick={closePopup} className={"inset-0 flex items-end justify-center fixed mb-2 "}>
+                <div onClick={closePopup} className={"inset-0 flex items-end justify-center fixed mb-2 px-2"}>
                     <ErrorPop setErrorPop={setErrorPop} message={errorMessage}/>
                 </div>
             }
             {
                 !!successPop &&
-                <div onClick={closePopup} className={"inset-0 flex items-end justify-center fixed mb-2"}>
+                <div onClick={closePopup} className={"inset-0 flex items-end justify-center fixed mb-2 px-2"}>
                     <SuccessPop setSuccessPop={setSuccessPop} message={successMessage}/>
                 </div>
             }

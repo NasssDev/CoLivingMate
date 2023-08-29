@@ -4,7 +4,7 @@ import {ButtonForm} from "../ButtonForm.jsx";
 export const FormModifyPassword = ({pwdFormData, handleChange, handleSubmitPwd}) => {
     return (
         <form method={"post"} onSubmit={handleSubmitPwd}
-              className="flex flex-col gap-4 max-w-md mx-auto p-4 rounded-xl shadow-lg">
+              className="w-full flex flex-col gap-4 p-4 rounded-xl shadow-lg">
             <h1 className={"font-semibold text-lg"}>Change your Password</h1>
             <label htmlFor="oldpassword">Old Password</label>
             <InputForm inputType="password" inputName="old_pwd" inputId="old_pwd" inputRequired={true}

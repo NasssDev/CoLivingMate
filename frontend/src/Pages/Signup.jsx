@@ -1,14 +1,17 @@
 import {InputForm} from "../Components/InputForm.jsx";
 import {ButtonForm} from "../Components/ButtonForm.jsx";
 import {useContext, useState} from "react";
-import {Link, Navigate} from "react-router-dom";
-import {ErrorPop} from "../Components/Popup/ErrorPop.jsx";
-import {SuccessPop} from "../Components/Popup/SuccessPop.jsx";
+import {Link} from "react-router-dom";
 import {MessageStateContext} from "../Utils/Context.jsx";
 
 export const Signup = () => {
 
-    const {successPop, setSuccessPop, errorPop, setErrorPop, errorMessage,setErrorMessage,setSuccessMessage,successMessage} = useContext(MessageStateContext);
+    const {
+        setSuccessPop,
+        setErrorPop,
+        setErrorMessage,
+        setSuccessMessage,
+    } = useContext(MessageStateContext);
 
 
     const [formData, setFormData] = useState({
@@ -48,6 +51,7 @@ export const Signup = () => {
                     }
                     setSuccessMessage("Your account has been successfully created, you can now sign in !");
                     setSuccessPop(true);
+                    navigate
                 }
             )
     }
@@ -63,16 +67,7 @@ export const Signup = () => {
 
     return (
         <>
-            {!!errorPop &&
-                <div onClick={closePopup} className={"inset-0 flex items-end justify-center fixed mb-2 "}>
-                    <ErrorPop setErrorPop={setErrorPop} message={errorMessage}/>
-                </div>}
-            {!!successPop &&
-                <div onClick={closePopup} className={"inset-0 flex items-end justify-center fixed mb-2"}>
-                    <SuccessPop setSuccessPop={setSuccessPop} message={successMessage}/>
-                </div>}
-
-            <h1 className="text-3xl text-indigo-500">Sign up</h1>
+            <h1 className="text-3xl text-indigo-500 pb-5">Sign up</h1>
             <div className="flex justify-center items-center">
                 <form onSubmit={handleSubmit} className={` w-64 py-6`}>
                     <label htmlFor="firstname">Firstname</label>
