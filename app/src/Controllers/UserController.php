@@ -76,7 +76,7 @@ class UserController extends AbstractController
             die;
         }
 
-        if($username && $pwd_hash && $firstname && $lastname && $email && $birthdate){
+        if ($username && $pwd_hash && $firstname && $lastname && $email && $birthdate) {
             $userManager->creatUser($username, $pwd_hash, $firstname, $lastname, $email, $birthdate);
 
             $getUserInfo = $userManager->readUserReturn($username);
@@ -185,6 +185,25 @@ class UserController extends AbstractController
             $this->renderJson("Error, make sure that the 'username', 'lastname', 'firstname', 'email' and 'birthdate' fields are filled in correctly!", 503);
             die;
         }
+
+        $this->renderJson("Change made successfully !");
+    }
+
+    #[Route('/delete_account', name: "deleteaccount", methods: ["GET"])]
+    public function deleteAccount()
+    {
+        $id_roommate = intval($_REQUEST["id_roommate"]);
+
+        $userManager = new UserManager(new PDOFactory());
+
+        $result = $userManager->readUserById($id_roommate);
+
+        if ($result instanceof Exception) {
+            $this->renderJson("Error while recovering the account, verify that it is still active or existing!", 503);
+            die;
+        }
+
+        $userManager->deleteAccount($id_roommate);
 
         $this->renderJson("Change made successfully !");
     }

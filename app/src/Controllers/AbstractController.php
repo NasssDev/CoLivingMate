@@ -13,15 +13,17 @@ abstract class AbstractController
         call_user_func_array([$this, $action], $params);
     }
 
-    public function renderJson(array|string $data="", int $code=200){
+    public function renderJson(array|string $data="", int $code=200, string $message=""){
 
         header('Content-Type: application/json');
         if(is_array($data)){
             echo json_encode(['status' => $code,
-                'data' => $data]);
+                'data' => $data,
+                'message' => $message]);
         } else {
             echo json_encode(['status' => $code,
-                'data' => [$data]]);
+                'data' => [$data],
+                'message' => $message]);
         }
     }
 }

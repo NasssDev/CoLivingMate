@@ -16,12 +16,10 @@ class ExpenditureController extends AbstractController
     #[Route('/create_expenditure', name: "create-expenditure", methods: ["POST", "GET"])]
     public function create_expenditure()
     {
-        $id_creator = $_REQUEST['id_creator'];
-        $expenditureName = $_REQUEST['expenditureName'];
-        $amount = $_REQUEST['amount'];
-        $amount = floatval($amount);
+        $id_creator = intval($_REQUEST['id_creator']);
+        $expenditureName = $_REQUEST['expenditure_name'];
+        $amount = floatval($_REQUEST['amount']);
         $id_flatshare = $_REQUEST['id_flatshare'];
-        $creation_date = $_REQUEST['creation_date'];
         // $uniqId = uniqid('', true);
 
         $expenditureManager = new ExpenditureManager(new PDOFactory());
@@ -33,15 +31,15 @@ class ExpenditureController extends AbstractController
         $result = $flatshareManager->selectOneFlatshare($id_flatshare);
 
         if ($result instanceof \Exception) {
-            $this->renderJson("Une erreur est survenue, vérifiez que la colocation est toujours active ou existante !", 401);
+            $this->renderJson("An error occurred, check that the roommate is still active or existing !", 401, "An error occurred, check that the roommate is still active or existing !");
             die;
         }
 
         $countUser = $expenditureManager->countUser($id_flatshare);
         $queryUser = $expenditureManager->userFlatShare($id_flatshare);
-        if ($countUser > 0){
+        if ($countUser > 0) {
             $amount = $amount / $countUser;
-        }else{
+        } else {
             $amount = 0;
         }
         $amount = floatval(number_format($amount, 2, '.', ''));
@@ -49,12 +47,15 @@ class ExpenditureController extends AbstractController
         $result = $userManager->readUserById($id_creator);
 
         if ($result instanceof \Exception) {
-            $this->renderJson("Une erreur est survenue, vérifiez que le compte est toujours actif ou existant !", 401);
+            $this->renderJson("An error occurred, verify that the account is still active or existing !", 401, "An error occurred, verify that the account is still active or existing !");
             die;
         }
 
-        $expenditureManager->createExpenditure($expenditureName, $id_flatshare, $amount, $id_creator, $queryUser);
+        if ($expenditureName && $id_flatshare && $amount && $id_creator && $queryUser) {
+            $expenditureManager->createExpenditure($expenditureName, $id_flatshare, $amount, $id_creator, $queryUser);
+        }
 
+        $this->renderJson("",200,"Expenditure created successfully !");
     }
 
     #[Route('/update_payed', name: "payed-expenditure", methods: ["POST", "GET"])]
@@ -83,24 +84,25 @@ class ExpenditureController extends AbstractController
     #[Route('/delete_expenditure', name: "delete-expenditure", methods: ["POST", "GET"])]
     public function deleteExpenditure()
     {
-
-        $expenditureId = $_REQUEST['expenditureId'];
+        $expenditureId = intval($_REQUEST['expenditure_id']);
         $expenditureManagerDelete = new ExpenditureManager(new PDOFactory());
 
         $expenditureManagerDelete->deleteExpenditure($expenditureId);
+
+        $this->renderJson("",200,"Expenditure deleted successfully !");
     }
 
     #[Route('/create_month_fee', name: "create-month", methods: ["POST", "GET"])]
     public function createMonthFee()
     {
         $fee_name = $_REQUEST['fee_name'];
-        $id_flatshare = $_REQUEST['id_flatshare'];
-        $feeAmount = $_REQUEST['fee_amount'];
-        $date = $_REQUEST['fee_date'];
+        $id_flatshare = intval($_REQUEST['id_flatshare']);
+        $feeAmount = intval($_REQUEST['fee_amount']);
+        $date = intval($_REQUEST['fee_date']);
 
         $expenditureManagerCreate = new ExpenditureManager(new PDOFactory());
 
-        $flatshareManager =  new FlatshareManager(new PDOFactory());
+        $flatshareManager = new FlatshareManager(new PDOFactory());
 
         $result = $flatshareManager->selectOneFlatshare($id_flatshare);
 
@@ -109,17 +111,23 @@ class ExpenditureController extends AbstractController
             die;
         }
 
-        $expenditureManagerCreate->createMonthFee($fee_name, $id_flatshare, $feeAmount, $date);
+        if ($fee_name && $id_flatshare && $feeAmount && $date) {
+            $expenditureManagerCreate->createMonthFee($fee_name, $id_flatshare, $feeAmount, $date);
+        }
+
+        $this->renderJson("", 200, "Monthly fee created successfully !");
     }
 
     #[Route('/delete_month_fee', name: "delete-month", methods: ["POST", "GET"])]
     public function deleteMonthFee()
     {
-        $monthFeedId = $_REQUEST['id'];
+        $monthFeedId = intval($_REQUEST['id']);
 
         $expenditureManagerDelete = new ExpenditureManager(new PDOFactory());
 
-        $expenditureManagerDelete->deleteMonthFee($monthFeedId);
+        if ($monthFeedId > 0) $expenditureManagerDelete->deleteMonthFee($monthFeedId);
+
+        $this->renderJson("", 200, "Monthly fee deleted successfully !");
     }
 
     #[Route('/get_month_fee', name: "get-month", methods: ["POST", "GET"])]
@@ -130,7 +138,6 @@ class ExpenditureController extends AbstractController
         $expenditureManagerGetMonth = new ExpenditureManager(new PDOFactory());
 
         $result = $expenditureManagerGetMonth->getMonthFee($id_flatshare);
-//        print_r($result);die;
-        $this->renderJson((array) $result);
+        $this->renderJson($result);
     }
 }

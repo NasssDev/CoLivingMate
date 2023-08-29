@@ -183,18 +183,20 @@ class UserManager extends BaseManager
         }
     }
 
-
-    public function deleteUser(string $username): void
+    /**
+     * @param int $id_roommate
+     * @return void
+     * @throws Exception
+     */
+    public function deleteAccount(int $id_roommate): void
     {
-        $query = $this->pdo->prepare("DELETE FROM roommate WHERE username=:username ");
-        $query->bindValue('username', $username, \PDO::PARAM_STR);
-        $query->execute();
-        // $query2 = $this->pdo->prepare("DELETE FROM article WHERE author=:username ");
-        // $query2->bindValue('username', $username, \PDO::PARAM_STR);
-        // $query2->execute(); 
-        // $query3 = $this->pdo->prepare("DELETE FROM comment WHERE author=:username ");
-        // $query3->bindValue('username', $username, \PDO::PARAM_STR);
-        // $query3->execute();   
+        try{
+            $query = $this->pdo->prepare("DELETE FROM roommate WHERE id=:id_roommate ");
+            $query->bindValue('id_roommate', $id_roommate, \PDO::PARAM_INT);
+            $query->execute();
+        } catch (Exception $e) {
+            throw new Exception("Error :". $e->getMessage());
+        }
     }
 
     public function countUser($flat_share_id)
@@ -205,5 +207,4 @@ class UserManager extends BaseManager
         $data = $queryCountUser->fetch();
         return $data[0];
     }
-
 }

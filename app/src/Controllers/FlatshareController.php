@@ -28,7 +28,7 @@ class FlatshareController extends AbstractController
         $result = $userManager->readUserById($id_creator);
 
         if ($result instanceof \Exception) {
-            $this->renderJson('A problem occurred during the creation, problem with the account creating the collocation, please try again !', 401);
+            $this->renderJson('A problem occurred during the creation, problem with the account creating the collocation, please try again !', 401,'A problem occurred during the creation, problem with the account creating the collocation, please try again !');
             die;
         }
 
@@ -37,19 +37,19 @@ class FlatshareController extends AbstractController
         if ($id_creator && $name && $address && $start_date && $city && $zip_code){
             $result = $flatshareManager->createFlatshare($id_creator, $name, $address, $start_date, $end_date, $city, $zip_code);
         }else{
-            $this->renderJson('An error occurred during creation, make sure that "name", "Address", "Start Date", "City" and "Zip Code" are correctly filled !', 401);
+            $this->renderJson('An error occurred during creation, make sure that "name", "Address", "Start Date", "City" and "Zip Code" are correctly filled !', 401,'An error occurred during creation, make sure that "name", "Address", "Start Date", "City" and "Zip Code" are correctly filled !');
             die;
         }
 
         if ($result instanceof \Exception) {
-            $this->renderJson('A problem occurred while creating, please try again !' . $result->getMessage(), 401);
+            $this->renderJson('A problem occurred while creating, please try again !', 401,'A problem occurred while creating, please try again !');
             die;
         }
 
         $lastInsertFlatshare = $flatshareManager->selectOneFlatshareToReturn($result);
 
         if ($lastInsertFlatshare instanceof \Exception) {
-            $this->renderJson('Created successfully, but unable to retrieve data !', 555);
+            $this->renderJson('Created successfully, but unable to retrieve data !', 555,'Created successfully, but unable to retrieve data !');
             die;
         }
 
@@ -218,7 +218,7 @@ class FlatshareController extends AbstractController
     {
         $id_flatshare = $_REQUEST['id_flatshare'];
         $email_roommate = $_REQUEST['email_roommate'];
-        
+
         $userManager = new UserManager(new PDOFactory());
 
         $result = $userManager->readUserEmail($email_roommate);
@@ -249,11 +249,13 @@ class FlatshareController extends AbstractController
             die;
         }
 
+        $flatshare_infos = $flatshareManager->selectInfos($id_flatshare);
+
         // all success //
-        $this->renderJson("Roommate $roommateName has been successfully kicked of flat share : $flatshareName !");
+        $this->renderJson($flatshare_infos,200 ,"Roommate $roommateName has been successfully kicked of flat share : $flatshareName !");
     }
 
-    #[Route('/select_all_roommate', name: "kickRoommate", methods: ["POST", "GET"])]
+    #[Route('/select_all_roommate', name: "selectallRoommate", methods: ["POST", "GET"])]
     public function selectAllRoommate()
     {
         $id_flatshare = $_REQUEST['id_flatshare'];
