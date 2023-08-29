@@ -78,7 +78,6 @@ function App() {
                                 <CreateFlatshare/>
                             </AuthRequired>
                         }/>
-                        />
                         <Route path="/profile" element={
                             <AuthRequired>
                                 <Profile/>
