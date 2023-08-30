@@ -14,6 +14,7 @@ import {CreateFlatshare} from "./Pages/CreateFlatshare.jsx";
 import {MessageStateContext, MyFlatsharesDetailsProvider} from "./Utils/Context.jsx";
 import {ErrorPop} from "./Components/Popup/ErrorPop.jsx";
 import {SuccessPop} from "./Components/Popup/SuccessPop.jsx";
+import {ErrorPage} from "./Pages/ErrorPage.jsx";
 
 function App() {
 
@@ -46,54 +47,54 @@ function App() {
                 {<Navbar isLogged={isLogged} setIsLogged={setIsLogged}/>}
                 <div className={` px-8 py-4 `}>
                     <Routes>
-                        <Route path="/" element={
-                            <AuthRequired>
-                                <Home flatshares={flatshares}/>
-                            </AuthRequired>
-                        }/>
-                        <Route path="/flatshare/:id_flatshare" element={
-                            <AuthRequired>
-                                <FlatshareDetails />
-                            </AuthRequired>
-                        }/>
-                        <Route path="/myflatshares" element={
-                            <AuthRequired>
-                                <MyFlatshares flatshares={flatshares} setFlatshares={setFlatshares}/>
-                            </AuthRequired>
-                        }>
-                        </Route>
+                            <Route path="/" element={
+                                <AuthRequired>
+                                    <Home flatshares={flatshares}/>
+                                </AuthRequired>
+                            }/>
+                            <Route path="/flatshare/:id_flatshare" element={
+                                <AuthRequired>
+                                    <FlatshareDetails/>
+                                </AuthRequired>
+                            }/>
+                            <Route path="/myflatshares" element={
+                                <AuthRequired>
+                                    <MyFlatshares flatshares={flatshares} setFlatshares={setFlatshares}/>
+                                </AuthRequired>
+                            }>
+                            </Route>
 
-                        <Route path="/myflatsharedetails/:id_flatshare" element={
-                            <AuthRequired>
-                                <MyFlatsharesDetailsProvider>
-                                    <MyFlatshareDetails flatshares={flatshares}/>
-                                </MyFlatsharesDetailsProvider>
-                            </AuthRequired>
-                        }>
-                        </Route>
+                            <Route path="/myflatsharedetails/:id_flatshare" element={
+                                <AuthRequired>
+                                    <MyFlatsharesDetailsProvider>
+                                        <MyFlatshareDetails flatshares={flatshares}/>
+                                    </MyFlatsharesDetailsProvider>
+                                </AuthRequired>
+                            }>
+                            </Route>
 
 
-                        <Route path="myflatshares/create" element={
-                            <AuthRequired>
-                                <CreateFlatshare/>
-                            </AuthRequired>
-                        }/>
-                        <Route path="/profile" element={
-                            <AuthRequired>
-                                <Profile/>
-                            </AuthRequired>
-                        }/>
-                        <Route path="/signin"
-                               element={
-                                   <Signin setIsLogged={setIsLogged}/>
-                               }
-                        />
-                        <Route path="/signup"
-                               element={
-                                   <Signup/>
-                               }
-                        />
-
+                            <Route path="myflatshares/create" element={
+                                <AuthRequired>
+                                    <CreateFlatshare/>
+                                </AuthRequired>
+                            }/>
+                            <Route path="/profile" element={
+                                <AuthRequired>
+                                    <Profile/>
+                                </AuthRequired>
+                            }/>
+                            <Route path="/signin"
+                                   element={
+                                       <Signin setIsLogged={setIsLogged}/>
+                                   }
+                            />
+                            <Route path="/signup"
+                                   element={
+                                       <Signup/>
+                                   }
+                            />
+                        <Route path="*" element={<ErrorPage/>}/>
                     </Routes>
 
 
