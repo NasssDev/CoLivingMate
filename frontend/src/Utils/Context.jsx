@@ -36,3 +36,25 @@ export const MyFlatsharesDetailsProvider = ({children}) => {
             </MyFlatsharesDetailsContext.Provider>
         )
 }
+
+export const ImageLoaderContext = createContext(null);
+
+export const ImageLoaderProvider = ({children}) => {
+    const [imageLoaded, setImageLoaded] = useState(false);
+    const handleImageLoad = () => {
+        setImageLoaded(true);
+    }
+    const initLoader = (imageUrl) => {
+        const preloadedImage = new Image();
+        preloadedImage.onload = handleImageLoad;
+        preloadedImage.src = imageUrl;
+    }
+
+    return (
+        <ImageLoaderContext.Provider value={{imageLoaded, initLoader}}>
+            {children}
+        </ImageLoaderContext.Provider>
+    )
+
+}
+

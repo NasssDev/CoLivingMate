@@ -1,12 +1,22 @@
 import {Link} from "react-router-dom";
+import {useContext, useState} from "react";
+import {ImageLoaderContext} from "../Utils/Context.jsx";
 
 export const FlatshareCard = ({flatshare}) => {
+
+    const {imageLoaded,initLoader} = useContext(ImageLoaderContext);
+
+    initLoader(`https://source.unsplash.com/400x200/?house,${flatshare.name}`);
 
     return (
         <div className="bg-white rounded-lg shadow-lg my-4 w-full max-w-sm">
             <Link to={`/flatshare/${flatshare.id}`}>
-                <img src={`https://source.unsplash.com/400x200/?house,${flatshare.name}`} alt="house"
-                     className=" rounded-t-lg"/>
+                {!!imageLoaded ?
+                    <img src={`https://source.unsplash.com/400x200/?house,${flatshare.name}`} alt="house"
+                       className=" rounded-t-lg"/>
+                :
+                    <div className="animate-pulse bg-gray-300 rounded-t-lg w-full h-[200px]"></div>
+                }
             </Link>
             <div className={"px-4 py-2"}>
                 <h3 className="font-semibold text-lg tracking-wide">{flatshare.name}</h3>
