@@ -3,6 +3,7 @@ import {InputForm} from "../Components/InputForm.jsx";
 import {ButtonForm} from "../Components/ButtonForm.jsx";
 import {MessageStateContext} from "../Utils/Context.jsx";
 import {useNavigate} from "react-router-dom";
+import {API_URL} from "../Constants/Constants.jsx";
 
 export const CreateFlatshare = () => {
 
@@ -21,7 +22,7 @@ export const CreateFlatshare = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetch("http://localhost:1200/create_flatshare", {
+        fetch(`${API_URL}create_flatshare`, {
             method: 'POST',
             headers: new Headers({
                 "Content-type": "application/x-www-form-urlencoded"

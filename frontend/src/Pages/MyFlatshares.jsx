@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import {MyFlatsharesCard} from "../Components/MyFlatsharesCard.jsx";
 import {Link} from "react-router-dom";
 import {MessageStateContext} from "../Utils/Context.jsx";
+import {API_URL} from "../Constants/Constants.jsx";
 
 export const MyFlatshares = () => {
 
@@ -14,7 +15,7 @@ export const MyFlatshares = () => {
     const [myFlatshares, setMyFlatshares] = useState([]);
 
     useEffect(() => {
-        fetch(`http://localhost:1200/select_roommate_flatshares?id_roommate=${userId}`)
+        fetch(`${API_URL}select_roommate_flatshares?id_roommate=${userId}`)
             .then(res => res.json())
             .then(data => {
                     if (data.status !== 200) {

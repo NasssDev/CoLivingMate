@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {RoomImageGallery} from "../Components/RoomImageGallery.jsx";
 import {FlatshareInfosCard} from "../Components/FlatshareInfosCard.jsx";
+import {API_URL} from "../Constants/Constants.jsx";
 
 export const FlatshareDetails = () => {
 
@@ -28,7 +29,7 @@ export const FlatshareDetails = () => {
     };
 
     useEffect(() => {
-        fetch("http://localhost:1200/select_infos?id_flatshare=" + id_flatshare)
+        fetch(`${API_URL}select_infos?id_flatshare=${id_flatshare}`)
             .then(res => res.json())
             .then(data => {
                     setCurrentFlatshare(data.data[0]);

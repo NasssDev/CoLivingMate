@@ -1,4 +1,3 @@
-import {useEffect, useState} from "react";
 import {FlatshareCard} from "../Components/FlatshareCard.jsx";
 
 export const Home = ({flatshares}) => {

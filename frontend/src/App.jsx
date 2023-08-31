@@ -15,6 +15,7 @@ import {MessageStateContext, MyFlatsharesDetailsProvider} from "./Utils/Context.
 import {ErrorPop} from "./Components/Popup/ErrorPop.jsx";
 import {SuccessPop} from "./Components/Popup/SuccessPop.jsx";
 import {ErrorPage} from "./Pages/ErrorPage.jsx";
+import {API_URL} from "./Constants/Constants.jsx";
 
 function App() {
 
@@ -33,7 +34,7 @@ function App() {
     const [flatshares, setFlatshares] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:1200/select_all")
+        fetch(`${API_URL}select_all`)
             .then(res => res.json())
             .then(data => {
                     setFlatshares(data.data);

@@ -1,6 +1,7 @@
 import {Trash2} from 'lucide-react';
 import {useContext} from "react";
 import {MessageStateContext, MyFlatsharesDetailsContext} from "../../Utils/Context.jsx";
+import {API_URL} from "../../Constants/Constants.jsx";
 
 export const FormFeesList = ({roommates, listClassName, currentUser}) => {
 
@@ -8,7 +9,7 @@ export const FormFeesList = ({roommates, listClassName, currentUser}) => {
     const {setInfosModified} = useContext(MyFlatsharesDetailsContext);
 
     const handleDelete = (feeId) => {
-        fetch(`http://localhost:1200/delete_month_fee?id=${feeId}}`)
+        fetch(`${API_URL}delete_month_fee?id=${feeId}`)
             .then(res => res.json())
             .then(data => {
                     if (data.status !== 200) {

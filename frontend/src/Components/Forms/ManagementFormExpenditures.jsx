@@ -1,5 +1,6 @@
 import {useContext, useState} from "react";
 import {MessageStateContext, MyFlatsharesDetailsContext} from "../../Utils/Context.jsx";
+import {API_URL} from "../../Constants/Constants.jsx";
 
 export const ManagementFormExpenditures = ({ id_flatshare}) => {
 
@@ -19,7 +20,7 @@ export const ManagementFormExpenditures = ({ id_flatshare}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetch(`http://localhost:1200/create_expenditure?id_flatshare=${id_flatshare}&id_creator=${sessionStorage.userId}&expenditure_name=${newExpenditure.expenditure_name}&amount=${newExpenditure.expenditure_amount}`)
+        fetch(`${API_URL}create_expenditure?id_flatshare=${id_flatshare}&id_creator=${sessionStorage.userId}&expenditure_name=${newExpenditure.expenditure_name}&amount=${newExpenditure.expenditure_amount}`)
             .then(res => res.json())
             .then(data => {
                     if (data.status !== 200) {

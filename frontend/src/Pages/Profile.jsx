@@ -2,6 +2,7 @@ import {useContext, useEffect, useState} from "react";
 import {FormModifyProfile} from "../Components/Forms/FormModifyProfile.jsx";
 import {FormModifyPassword} from "../Components/Forms/FormModifyPassword.jsx";
 import {MessageStateContext} from "../Utils/Context.jsx";
+import {API_URL} from "../Constants/Constants.jsx";
 
 export const Profile = () => {
 
@@ -23,7 +24,7 @@ export const Profile = () => {
     });
 
     useEffect(() => {
-        fetch(`http://localhost:1200/get_roommate?id_roommate=${sessionStorage.userId}`)
+        fetch(`${API_URL}get_roommate?id_roommate=${sessionStorage.userId}`)
             .then(res => res.json())
             .then(data => {
                 setFormData(() => ({...data.data}));
@@ -34,7 +35,7 @@ export const Profile = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetch("http://localhost:1200/update_roommate", {
+        fetch(`${API_URL}update_roommate`, {
             method: 'POST',
             headers: new Headers({
                 "Content-type": "application/x-www-form-urlencoded"
@@ -64,7 +65,7 @@ export const Profile = () => {
             setErrorPop(true);
             return;
         }
-        fetch("http://localhost:1200/change_pwd", {
+        fetch(`${API_URL}change_pwd`, {
             method: 'POST',
             headers: new Headers({
                 "Content-type": "application/x-www-form-urlencoded"
@@ -94,7 +95,7 @@ export const Profile = () => {
     }
 
     const handleDeleteAccount = () => {
-        fetch(`http://localhost:1200/delete_account?id_roommate=${sessionStorage.userId}`)
+        fetch(`${API_URL}delete_account?id_roommate=${sessionStorage.userId}`)
             .then(res => res.json())
             .then(data => {
                 if (data.status !== 200) {

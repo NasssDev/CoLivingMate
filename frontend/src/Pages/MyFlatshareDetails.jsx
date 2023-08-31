@@ -11,6 +11,7 @@ import {ModalMessage} from "../Components/ModalMessage.jsx";
 import {RoomImageGallery} from "../Components/RoomImageGallery.jsx";
 import {FlatshareInfosCard} from "../Components/FlatshareInfosCard.jsx";
 import {HeaderMyFlatshareDetails} from "../Components/HeaderMyFlatshareDetails.jsx";
+import {API_URL} from "../Constants/Constants.jsx";
 
 
 export const MyFlatshareDetails = () => {
@@ -55,7 +56,7 @@ export const MyFlatshareDetails = () => {
     };
 
     useEffect(() => {
-        fetch(`http://localhost:1200/select_infos?id_flatshare=${id_flatshare}`)
+        fetch(`${API_URL}select_infos?id_flatshare=${id_flatshare}`)
             .then(res => res.json())
             .then(data => {
                     if (data.status !== 200) {
@@ -77,7 +78,7 @@ export const MyFlatshareDetails = () => {
     }, [roommates]);
 
     const handleLeaveFlatshare = () => {
-        fetch(`http://localhost:1200/kick_roommate?id_flatshare=${id_flatshare}&email_roommate=${currentUser.roommate_email}`)
+        fetch(`${API_URL}kick_roommate?id_flatshare=${id_flatshare}&email_roommate=${currentUser.roommate_email}`)
             .then(res => res.json())
             .then(data => {
                 if (data.status !== 200) {
@@ -97,7 +98,7 @@ export const MyFlatshareDetails = () => {
     }
 
     const handleDeleteFlatshare = () => {
-        fetch(`http://localhost:1200/delete_flatshare?id_flatshare=${id_flatshare}`)
+        fetch(`${API_URL}delete_flatshare?id_flatshare=${id_flatshare}`)
             .then(res => res.json())
             .then(data => {
                 if (data.status !== 200) {

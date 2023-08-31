@@ -1,5 +1,7 @@
 import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
+import {API_URL} from "../Constants/Constants.jsx";
+
 
 export const MyFlatsharesCard = ({flatshare}) => {
 
@@ -10,14 +12,14 @@ export const MyFlatsharesCard = ({flatshare}) => {
     const [monthlyFee, setMonthlyFee] = useState([]);
 
     useEffect(() => {
-        fetch(`http://localhost:1200/select_all_roommate?id_flatshare=${flatshare.id}`)
+    fetch(`${API_URL}select_all_roommate?id_flatshare=${flatshare.id}`)
             .then(res => res.json())
             .then(data => {
                     setRoommates(data.data);
                 }
             )
 
-        fetch(`http://localhost:1200/get_month_fee?id_flatshare=${flatshare.id}`)
+        fetch(`${API_URL}get_month_fee?id_flatshare=${flatshare.id}`)
             .then(res => res.json())
             .then(data => {
                     setMonthlyFee(data.data);

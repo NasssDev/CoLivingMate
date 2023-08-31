@@ -4,6 +4,7 @@ import {InputForm} from "../Components/InputForm.jsx";
 import {Link} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
 import {MessageStateContext} from "../Utils/Context.jsx";
+import {API_URL} from "../Constants/Constants.jsx";
 export const Signin = ({ setIsLogged }) => {
 
     const { setErrorPop,setErrorMessage} = useContext(MessageStateContext);
@@ -14,7 +15,7 @@ export const Signin = ({ setIsLogged }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetch("http://localhost:1200/login", {
+        fetch(`${API_URL}login`, {
             method: 'POST',
             headers: new Headers({
                 "Content-type": "application/x-www-form-urlencoded"
@@ -39,7 +40,8 @@ export const Signin = ({ setIsLogged }) => {
                         navigate("/");
                         return;
                     }
-                    setErrorPop("An error occured, please try again later");
+                    setErrorMessage("Problem to fetch data from the server, please try again later !");
+                    setErrorPop(true);
                 }
             )
     }

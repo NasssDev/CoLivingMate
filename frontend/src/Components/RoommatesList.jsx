@@ -1,6 +1,7 @@
 import {useContext, useState} from "react";
 import {ModalMessage} from "./ModalMessage.jsx";
 import {MessageStateContext, MyFlatsharesDetailsContext} from "../Utils/Context.jsx";
+import {API_URL} from "../Constants/Constants.jsx";
 
 export const RoommatesList = (
     {
@@ -25,7 +26,7 @@ export const RoommatesList = (
     }
 
     const handleConfirm = () => {
-        fetch(`http://localhost:1200/kick_roommate?email_roommate=${emailRoommate}&id_flatshare=${id_flatshare}`)
+        fetch(`${API_URL}kick_roommate?email_roommate=${emailRoommate}&id_flatshare=${id_flatshare}`)
             .then(res => res.json())
             .then(data => {
                 if (data.status !== 200) {

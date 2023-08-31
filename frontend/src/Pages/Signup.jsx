@@ -1,8 +1,9 @@
 import {InputForm} from "../Components/InputForm.jsx";
 import {ButtonForm} from "../Components/ButtonForm.jsx";
 import {useContext, useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {MessageStateContext} from "../Utils/Context.jsx";
+import {API_URL} from "../Constants/Constants.jsx";
 
 export const Signup = () => {
 
@@ -13,6 +14,7 @@ export const Signup = () => {
         setSuccessMessage,
     } = useContext(MessageStateContext);
 
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         firstname: "",
@@ -32,7 +34,7 @@ export const Signup = () => {
             return;
         }
 
-        fetch("http://localhost:1200/signup", {
+        fetch(`${API_URL}signup`, {
             method: 'POST',
             headers: new Headers({
                 "Content-type": "application/x-www-form-urlencoded"
@@ -51,18 +53,13 @@ export const Signup = () => {
                     }
                     setSuccessMessage("Your account has been successfully created, you can now sign in !");
                     setSuccessPop(true);
-                    navigate
+                    navigate("/signin");
                 }
             )
     }
 
     const handleChange = (e) => {
         setFormData(current => ({...current, [e.target.name]: e.target.value}));
-    }
-
-    const closePopup = () => {
-        setSuccessPop(false);
-        setErrorPop(false);
     }
 
     return (

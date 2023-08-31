@@ -1,6 +1,7 @@
 import {useContext, useState} from "react";
 import {useParams} from "react-router-dom";
 import {MessageStateContext, MyFlatsharesDetailsContext} from "../../Utils/Context.jsx";
+import {API_URL} from "../../Constants/Constants.jsx";
 
 
 export const ManagementFormRoommates = () => {
@@ -20,7 +21,7 @@ export const ManagementFormRoommates = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetch(`http://localhost:1200/add_roommate?id_flatshare=${id_flatshare}&new_roommate=${newRoommate}`)
+        fetch(`${API_URL}add_roommate?id_flatshare=${id_flatshare}&new_roommate=${newRoommate}`)
             .then(res => res.json())
             .then(data => {
                     if (data.status !== 200) {
