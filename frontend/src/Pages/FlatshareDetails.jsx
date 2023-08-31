@@ -24,6 +24,8 @@ export const FlatshareDetails = () => {
 
     const [selectedImage, setSelectedImage] = useState(`https://source.unsplash.com/600x300/?house,${currentFlatshare.flat_share_name}`);
 
+    const [dataLoaded, setDataLoaded] = useState(false);
+
     const handleImageClick = (image) => {
         setSelectedImage(image);
     };
@@ -32,8 +34,13 @@ export const FlatshareDetails = () => {
         fetch(`${API_URL}select_infos?id_flatshare=${id_flatshare}`)
             .then(res => res.json())
             .then(data => {
+                    if (data.status !== 200) {
+                        console.error('Error :', data.data[0]);
+                        return;
+                    }
                     setCurrentFlatshare(data.data[0]);
                     setRoommates(JSON.parse(data.data[0].roommates));
+                    setDataLoaded(true);
                 }
             )
     }, [])
@@ -46,18 +53,21 @@ export const FlatshareDetails = () => {
     }, [roommates])
 
     return (
-        <div className="h-full min-h-screen bg-white">
-            <h1 className="text-3xl text-indigo-500">Flat Share Details</h1>
-            <div className="mt-4">
-                <h1 className="font-semibold text-xl tracking-wide">{currentFlatshare.flat_share_name}</h1>
-                <RoomImageGallery images={images} selectedImage={selectedImage} handleImageClick={handleImageClick} />
-               <FlatshareInfosCard currentFlatshare={currentFlatshare} roommates={roommates} />
-                <div>
-                    <a href={`mailto:${emailOwner}`}
-                       className="bg-indigo-500 text-lg text-white px-6 py-2 rounded-lg mt-4  hover:bg-indigo-600 transition duration-300">Send
-                        a message</a>
+        !!dataLoaded && (
+            <div className="h-full min-h-screen bg-white">
+                <h1 className="text-3xl text-indigo-500">Flat Share Details</h1>
+                <div className="mt-4">
+                    <h1 className="font-semibold text-xl tracking-wide">{currentFlatshare.flat_share_name}</h1>
+                    <RoomImageGallery images={images} selectedImage={selectedImage}
+                                      handleImageClick={handleImageClick}/>
+                    <FlatshareInfosCard currentFlatshare={currentFlatshare} roommates={roommates}/>
+                    <div>
+                        <a href={`mailto:${emailOwner}`}
+                           className="bg-indigo-500 text-lg text-white px-6 py-2 rounded-lg mt-4  hover:bg-indigo-600 transition duration-300">Send
+                            a message</a>
+                    </div>
                 </div>
             </div>
-        </div>
+        )
     )
 }
