@@ -30,8 +30,6 @@ export const MyFlatshareDetails = () => {
 
     const [myFlatshare, setMyFlatshare] = useState([]);
 
-    const [roommateNumber, setRoommateNumber] = useState(0);
-
     const [roommates, setRoommates] = useState([]);
 
     const [currentUser, setCurrentUser] = useState({});
@@ -67,7 +65,6 @@ export const MyFlatshareDetails = () => {
                     }
                     const roommatesArray = JSON.parse(data.data[0].roommates);
                     setMyFlatshare(data.data[0]);
-                    setRoommateNumber(roommatesArray.length);
                     setRoommates(roommatesArray);
                     setDataLoaded(true);
                 }
