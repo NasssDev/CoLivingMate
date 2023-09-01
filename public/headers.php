@@ -5,7 +5,9 @@ $allowedOrigins = array(
     'http://localhost:5173',
 );
 
-$origin = $_SERVER['HTTP_ORIGIN'];
+$origin = $_SERVER['HTTP_ORIGIN'] ?? "";
+
+
 
 
 if (in_array($origin, $allowedOrigins)) {

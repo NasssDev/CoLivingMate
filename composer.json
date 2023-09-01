@@ -2,7 +2,7 @@
     "name": "justin/colloc",
     "autoload": {
         "psr-4": {
-            "Justin\\Colloc\\": "app/"
+            "Justin\\Colloc\\": "public/"
         }
     },
     "authors": [
