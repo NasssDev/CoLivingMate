@@ -3,7 +3,6 @@
 $allowedOrigins = array(
     'https://coliving-mate.vercel.app',
     'http://localhost:5173',
-    'https://coliving-mate-nasssdev.vercel.app/'
 );
 
 $origin = $_SERVER['HTTP_ORIGIN'];
