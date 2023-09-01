@@ -54,7 +54,7 @@ export const RoommatesList = (
                             <br/>
                             {"birth date : " + roommate?.roommate_birthdate}
                             <br/>
-                            {"Joined : " + format(roommate?.roommate_joindate, "dd/MM/yyyy")}
+                            {"Joined : " + format(new Date(roommate?.roommate_joindate), "dd/MM/yyyy")}
                         </p>
                         {currentUser?.roommate_role === 1
                             && roommate?.roommate_id !== currentUser?.roommate_id
