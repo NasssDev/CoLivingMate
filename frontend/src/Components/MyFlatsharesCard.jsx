@@ -7,14 +7,16 @@ export const MyFlatsharesCard = ({flatshare}) => {
 
     const [roommates, setRoommates] = useState([]);
 
-    const [expenditure, setExpenditure] = useState([]);
-
     const [monthlyFee, setMonthlyFee] = useState([]);
 
     useEffect(() => {
     fetch(`${API_URL}select_all_roommate?id_flatshare=${flatshare.id}`)
             .then(res => res.json())
             .then(data => {
+                if(data.status !== 200){
+                    console.error('Error :', data.data);
+                    return;
+                }
                     setRoommates(data.data);
                 }
             )
@@ -22,6 +24,10 @@ export const MyFlatsharesCard = ({flatshare}) => {
         fetch(`${API_URL}get_month_fee?id_flatshare=${flatshare.id}`)
             .then(res => res.json())
             .then(data => {
+                if(data.status !== 200){
+                    console.error('Error :', data.data);
+                    return;
+                }
                     setMonthlyFee(data.data);
                 }
             )
