@@ -2,6 +2,7 @@ import {useContext, useState} from "react";
 import {ModalMessage} from "./ModalMessage.jsx";
 import {MessageStateContext, MyFlatsharesDetailsContext} from "../Utils/Context.jsx";
 import {API_URL} from "../Constants/Constants.jsx";
+import {format} from "date-fns";
 
 export const RoommatesList = (
     {
@@ -53,7 +54,7 @@ export const RoommatesList = (
                             <br/>
                             {"birth date : " + roommate?.roommate_birthdate}
                             <br/>
-                            {"Joined : " + roommate?.roommate_joindate}
+                            {"Joined : " + format(roommate?.roommate_joindate, "dd/MM/yyyy")}
                         </p>
                         {currentUser?.roommate_role === 1
                             && roommate?.roommate_id !== currentUser?.roommate_id
