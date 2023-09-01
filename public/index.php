@@ -2,8 +2,8 @@
 
 use App\Routes\Route;
 
-require_once './vendor/autoload.php';
-require_once './headers.php';
+require_once 'vendor/autoload.php';
+require_once 'headers.php';
 
 $controllerDir = dirname(__FILE__) . '/src/Controllers';
 $dirs = scandir($controllerDir);
