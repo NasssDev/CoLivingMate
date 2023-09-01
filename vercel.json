@@ -8,10 +8,6 @@
         "buildCommand": "npm install && npm run build",
         "outputDirectory": "/frontend/dist"
       }
-    },
-    {
-      "src": "/app/**/*",
-      "use": "@vercel/php"
     }
   ],
   "routes": [
