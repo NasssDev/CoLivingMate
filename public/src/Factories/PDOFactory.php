@@ -11,7 +11,7 @@ class PDOFactory implements Database
     private string $userName;
     private string $password;
 
-    public function __construct(string $host = "database", string $dbName = "data", string $userName = "root", string $password = "password")
+    public function __construct(string $host = "b3krsqonxeyllcoo0dpz-mysql.services.clever-cloud.com", string $dbName = "b3krsqonxeyllcoo0dpz", string $userName = "upuaunwfpsgkjf7r", string $password = "tCAsxVaKGXkOnJeDURUr")
     {
         $this->host = $host;
         $this->dbName = $dbName;
