@@ -33,7 +33,7 @@ export const ExpendituresList = ({roommates, listClassName, currentUser}) => {
                         return <form key={expenditure.expenditure_id}
                                      className={`font-normal text-sm text-sky-700 py-1`}>
                             <span key={expenditure.expenditure_id}
-                                  className={`font-normal text-sm text-sky-700`}>{expenditure.expenditure_name + " : " + expenditure.expenditure_amount + " €"}</span>
+                                  className={`font-normal text-sm text-sky-700`}>{expenditure.expenditure_name + " : " + expenditure.expenditure_amount.toFixed(2) + " €"}</span>
                             {
                                 currentUser?.roommate_role === 1 &&
                                 <button type={"button"} onClick={() => {
