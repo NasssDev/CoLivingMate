@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import {useContext, useState} from "react";
+import {useContext} from "react";
 import {ImageLoaderContext} from "../Utils/Context.jsx";
 
 export const FlatshareCard = ({flatshare}) => {
@@ -28,7 +28,7 @@ export const FlatshareCard = ({flatshare}) => {
                     </div>
                     <div>
                         <img src="/img/roommate.svg" alt="roommate" className="w-6 h-6 rounded-full float-left mr-2"/>
-                        <span className="text-gray-400">{Math.floor(Math.random() * 5) + 1}</span>
+                        <span className="text-gray-400">{flatshare.roommate_count}</span>
                         <span className="text-gray-600">/6</span>
                     </div>
                 </div>

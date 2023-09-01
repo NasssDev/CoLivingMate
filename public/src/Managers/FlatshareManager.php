@@ -112,8 +112,7 @@ class FlatshareManager extends BaseManager
     public function selectAllFlatshare(): array|Exception
     {
         try {
-            $query = $this->pdo->query('SELECT * FROM flat_share WHERE 1');
-
+            $query = $this->pdo->query('SELECT fs.*, (SELECT COUNT(*) FROM roomate_has_flat_share rmf WHERE rmf.flat_share_id = fs.id) AS roommate_count FROM flat_share fs;');
             $data = $query->fetchAll(\PDO::FETCH_ASSOC);
             // $data[] = new FlatShare($data);
             return $data;
