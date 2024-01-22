@@ -53,6 +53,13 @@ export const Signin = ({ setIsLogged }) => {
     return (<>
         <div className="h-full min-h-screen bg-white">
             <h1 className="text-3xl text-indigo-500 pb-5">Signin</h1>
+            <p className="text-gray-600">
+                To test the app signin with:
+                <ul>
+                    <li>Username : nass79</li>
+                    <li>Password : nass</li>
+                </ul>
+            </p>
             <div className="flex flex-col justify-center items-center">
                 <h3 className="text-xl font-semibold text-indigo-800">Happy to see you, welcome !</h3>
                 <form method={"post"} onSubmit={handleSubmit} className={` w-64 py-6`}>
